@@ -3,14 +3,15 @@
 interface HomeScreenProps {
   isActive: boolean
   onStartReading: () => void
+  bookCount: 1 | 7
 }
 
-export function HomeScreen({ isActive, onStartReading }: HomeScreenProps) {
-  const books = [
+export function HomeScreen({ isActive, onStartReading, bookCount }: HomeScreenProps) {
+  const allBooks = [
     {
       id: 1,
       title: "法老王的宝藏",
-      image: "https://images.unsplash.com/photo-1626262963665-22d716223b2c?auto=format&fit=crop&q=80",
+      image: "/egyptian-pharaoh-treasure-ancient-egypt.jpg",
       date: "昨天 20:30",
       status: "reading" as const,
       progress: 80,
@@ -19,7 +20,7 @@ export function HomeScreen({ isActive, onStartReading }: HomeScreenProps) {
     {
       id: 2,
       title: "海底两万里",
-      image: "https://images.unsplash.com/photo-1535591273668-578e31182c4f?auto=format&fit=crop&q=80",
+      image: "/underwater-ocean-submarine-sea-adventure.jpg",
       date: "刚刚添加",
       status: "new" as const,
       tape: "cyan" as const,
@@ -27,7 +28,7 @@ export function HomeScreen({ isActive, onStartReading }: HomeScreenProps) {
     {
       id: 3,
       title: "魔法红舞鞋",
-      image: "https://images.unsplash.com/photo-1551024601-562963525602?auto=format&fit=crop&q=80",
+      image: "/magic-red-shoes-fairy-tale-ballet.jpg",
       date: "3天前读过",
       status: "completed" as const,
       tape: "pink" as const,
@@ -35,25 +36,37 @@ export function HomeScreen({ isActive, onStartReading }: HomeScreenProps) {
     {
       id: 4,
       title: "火星大救援",
-      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80",
+      image: "/mars-planet-space-rescue-mission.jpg",
       date: "Oct 24",
       tape: "green" as const,
     },
     {
       id: 5,
       title: "狮子王辛巴",
-      image: "https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&q=80",
+      image: "/lion-king-simba-africa-savanna.jpg",
       date: "Oct 20",
+      status: "reading" as const,
       tape: "yellow" as const,
     },
     {
       id: 6,
       title: "晚安月亮",
-      image: "https://images.unsplash.com/photo-1518932945647-7a1c969f8be2?auto=format&fit=crop&q=80",
+      image: "/goodnight-moon-night-sky-bedtime.jpg",
       date: "Sep 15",
+      status: "completed" as const,
       tape: "pink" as const,
     },
+    {
+      id: 7,
+      title: "小王子",
+      image: "/little-prince-stars-planet-rose.jpg",
+      date: "Sep 10",
+      status: "reading" as const,
+      tape: "green" as const,
+    },
   ]
+
+  const books = bookCount === 1 ? [allBooks[0]] : allBooks
 
   return (
     <div className={`fixed inset-0 flex-col ${isActive ? "flex" : "hidden"}`}>
@@ -62,7 +75,7 @@ export function HomeScreen({ isActive, onStartReading }: HomeScreenProps) {
           <h1 className="text-[1.8rem] font-black text-[#FF8F00] mb-1 [text-shadow:2px_2px_0px_rgba(255,236,179,0.5)] font-fredoka">
             我的收藏册
           </h1>
-          <p className="text-sm text-[#8D6E63] font-bold">已收集 12 个精彩故事</p>
+          <p className="text-sm text-[#8D6E63] font-bold">已收集 {bookCount === 1 ? "1" : "12"} 个精彩故事</p>
         </div>
 
         <div className="bg-white border-2 border-[#FFECB3] px-3 py-1.5 rounded-[20px] flex items-center gap-1.5 shadow-[0_4px_10px_rgba(255,193,7,0.15)]">
@@ -72,7 +85,11 @@ export function HomeScreen({ isActive, onStartReading }: HomeScreenProps) {
       </div>
 
       <div className="flex-1 overflow-y-auto px-6 pb-[130px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden relative z-[1]">
-        <div className="grid grid-cols-2 gap-x-5 gap-y-10 items-start">
+        <div
+          className={
+            bookCount === 1 ? "flex justify-center items-start pt-6" : "grid grid-cols-2 gap-x-5 gap-y-10 items-start"
+          }
+        >
           {books.map((book, index) => (
             <div
               key={book.id}
@@ -83,7 +100,13 @@ export function HomeScreen({ isActive, onStartReading }: HomeScreenProps) {
                 [backface-visibility:hidden]
                 hover:!rotate-0 hover:scale-[1.03] hover:shadow-[0_15px_40px_rgba(141,110,99,0.2)] hover:z-10
                 active:scale-[0.96]
-                ${index % 2 === 0 ? "rotate-[-2deg] origin-top-left" : "rotate-[1.5deg] origin-top-right mt-10"}
+                ${
+                  bookCount === 1
+                    ? "w-[280px] scale-110"
+                    : index % 2 === 0
+                      ? "rotate-[-2deg] origin-top-left"
+                      : "rotate-[1.5deg] origin-top-right mt-10"
+                }
               `}
             >
               {/* Washi Tape */}
@@ -149,11 +172,15 @@ export function HomeScreen({ isActive, onStartReading }: HomeScreenProps) {
 
       <div className="fixed bottom-[30px] left-1/2 -translate-x-1/2 flex flex-col items-center z-[100]">
         {/* Pulse Ring */}
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 w-[80%] h-[60%] rounded-[50px] bg-[rgba(255,215,0,0.4)] z-[-1] animate-pulse-ring-gold" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90px] h-[90px] rounded-full bg-[rgba(255,215,0,0.4)] z-[-1] animate-pulse-ring-gold" />
 
-        {/* Hippo Head */}
-        <div className="text-[4rem] mb-[-22px] z-[2] animate-hippo-float [filter:drop-shadow(0_4px_0px_rgba(0,0,0,0.1))] pointer-events-none">
-          🦛
+        {/* Fox Peeking - positioned to left of button, partially hidden */}
+        <div className="absolute left-[-85px] bottom-[5px] z-[1] animate-hippo-float pointer-events-none">
+          <img
+            src="/images/584f5698aba94993b10b2bcb3852ae6c-0-visiblewatermark.png"
+            alt="Fox mascot"
+            className="w-[100px] h-[100px] object-contain [filter:drop-shadow(0_4px_8px_rgba(0,0,0,0.1))]"
+          />
         </div>
 
         {/* Main CTA Button */}
@@ -170,6 +197,7 @@ export function HomeScreen({ isActive, onStartReading }: HomeScreenProps) {
             transition-all duration-100
             active:translate-y-1 active:shadow-[0_2px_0_#FF8F00]
             shine-effect
+            z-[2]
           "
         >
           开始读书

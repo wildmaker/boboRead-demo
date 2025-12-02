@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { Check, Eye, Rocket } from "lucide-react"
 
 interface OnboardingGuideProps {
   onComplete: () => void
@@ -83,7 +84,10 @@ export function OnboardingGuide({ onComplete }: OnboardingGuideProps) {
               e.currentTarget.style.boxShadow = "0 6px 0 #FF8F00, 0 10px 20px rgba(0,0,0,0.1)"
             }}
           >
-            放好啦 ✅
+            <span className="inline-flex items-center gap-2 justify-center">
+              <span>放好啦</span>
+              <Check className="w-5 h-5" />
+            </span>
           </button>
         </div>
 
@@ -112,7 +116,10 @@ export function OnboardingGuide({ onComplete }: OnboardingGuideProps) {
               e.currentTarget.style.boxShadow = "0 6px 0 #FF8F00, 0 10px 20px rgba(0,0,0,0.1)"
             }}
           >
-            看清了 👀
+            <span className="inline-flex items-center gap-2 justify-center">
+              <span>看清了</span>
+              <Eye className="w-5 h-5" />
+            </span>
           </button>
         </div>
 
@@ -148,7 +155,10 @@ export function OnboardingGuide({ onComplete }: OnboardingGuideProps) {
               e.currentTarget.style.boxShadow = "0 6px 0 #FF8F00, 0 10px 20px rgba(0,0,0,0.1)"
             }}
           >
-            开始体验 🚀
+            <span className="inline-flex items-center gap-2 justify-center">
+              <span>开始体验</span>
+              <Rocket className="w-5 h-5" />
+            </span>
           </button>
         </div>
       </div>

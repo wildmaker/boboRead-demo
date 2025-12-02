@@ -253,6 +253,15 @@
   }
 }
 
+@keyframes flash-overlay {
+  0% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 /* Updated pulse ring animation to match HTML demo */
 @keyframes pulse-ring {
   0% {
@@ -293,6 +302,22 @@
   }
   100% {
     transform: scale(1.3);
+    opacity: 0;
+  }
+}
+
+/* Genie effect - 神奇收纳动画 */
+@keyframes genie-out {
+  0% {
+    transform: scale(1.1) translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.6) translateY(-20vh) translateX(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0.15) translateY(-35vh) translateX(-35vw);
     opacity: 0;
   }
 }
@@ -377,6 +402,35 @@
   animation: pulse-ring-gold 2s infinite;
 }
 
+.animate-genie-out {
+  animation: genie-out 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Scan camera focus mask & effects (扫描页 UI 优化) */
+.scan-focus-mask {
+  position: relative;
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6);
+}
+
+.scan-focus-mask-success {
+  border-width: 3px !important;
+  border-style: solid !important;
+  border-color: #00e676 !important;
+  box-shadow:
+    0 0 0 100vmax rgba(0, 0, 0, 0.7),
+    0 0 30px #00e676;
+}
+
+.scan-line {
+  background: #ffffff;
+  box-shadow: 0 0 10px #ffffff;
+  opacity: 0.8;
+}
+
+.animate-flash {
+  animation: flash-overlay 0.3s ease-out forwards;
+}
+
 /* Add onboarding animation utility classes */
 .animate-float {
   animation: float 3s ease-in-out infinite;
@@ -406,4 +460,322 @@
 /* Add font-emoji utility for emoji rendering */
 .font-emoji {
   font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* ===================== FTUX Intro (遇见小宝) ===================== */
+
+:root {
+  --ftux-bg-color: #fffdf8;
+  --ftux-dot-color: rgba(0, 0, 0, 0.06);
+  --ftux-brand-gold: #ffd700;
+  --ftux-brand-orange: #ff6d00;
+  --ftux-brand-blue: #00acc1;
+  --ftux-text-dark: #4e342e;
+  --ftux-text-sub: #8d6e63;
+}
+
+.ftux-root {
+  background-color: var(--ftux-bg-color);
+  /* 保持与主背景一致的网点纸张质感 */
+  background-image: radial-gradient(var(--ftux-dot-color) 2px, transparent 2px);
+  background-size: 24px 24px;
+}
+
+.ftux-skip-btn {
+  position: absolute;
+  top: 50px;
+  right: 24px;
+  color: #bcaaa4;
+  font-weight: 800;
+  font-size: 0.9rem;
+  z-index: 100;
+  cursor: pointer;
+  padding: 10px;
+  background: transparent;
+  border: none;
+}
+
+.ftux-carousel {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.ftux-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.ftux-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding-top: 15vh;
+}
+
+/* 第二步：自定义背景色、去除点阵，并单独控制上内边距 */
+.ftux-slide-step2 {
+  background-color: #f2f1ef; /* 填充顶部到视频之间的区域，减少与视频背景的色差 */
+  padding-top: 8vh; /* 覆盖 .ftux-slide 中的 15vh，让视频整体更靠上 */
+}
+
+/* 第二步：调整视频与文案布局，让视频更靠上、文本间距更自然 */
+.ftux-slide-step2 .ftux-mascot-area {
+  flex: 0 0 auto;
+  margin-top: 20px;
+  margin-bottom: 24px;
+}
+
+.ftux-slide-step2 .ftux-text-area {
+  padding: 0 40px 110px;
+  margin-top: 28px; /* 增加视频与文案之间的上下间距，视频位置不变 */
+}
+
+.ftux-voice-bubble {
+  background: #fff;
+  border: 2px solid var(--ftux-brand-blue);
+  border-radius: 20px 20px 20px 0;
+  padding: 12px 20px;
+  box-shadow: 0 8px 20px rgba(0, 172, 193, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+}
+
+.ftux-slide.active .ftux-voice-bubble {
+  transform: scale(1);
+  opacity: 1;
+  margin-bottom: 10px;
+}
+
+.ftux-voice-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-left: 2px solid var(--ftux-brand-blue);
+  border-bottom: 2px solid var(--ftux-brand-blue);
+  border-bottom-left-radius: 50%;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.ftux-speaker-icon {
+  font-size: 1.2rem;
+}
+
+.ftux-bubble-text {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: var(--ftux-brand-blue);
+}
+
+.ftux-wave-box {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 16px;
+}
+
+.ftux-bar {
+  width: 4px;
+  height: 100%;
+  background: var(--ftux-brand-blue);
+  border-radius: 2px;
+  animation: none;
+  transform: scaleY(0.4);
+}
+
+.ftux-slide.active .ftux-bar {
+  animation: ftux-wave 1s infinite ease-in-out;
+}
+
+.ftux-slide.active .ftux-bar:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.ftux-slide.active .ftux-bar:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.ftux-slide.active .ftux-bar:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+.ftux-slide.active .ftux-bar:nth-child(4) {
+  animation-delay: 0.3s;
+}
+
+.ftux-slide.active .ftux-bar:nth-child(5) {
+  animation-delay: 0.4s;
+}
+
+@keyframes ftux-wave {
+  0%,
+  100% {
+    transform: scaleY(0.4);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.ftux-mascot-area {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.ftux-fox-pose {
+  font-size: 6rem;
+  filter: drop-shadow(0 20px 30px rgba(93, 64, 55, 0.15));
+  animation: ftux-float 4s ease-in-out infinite;
+  transform-origin: bottom center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ftux-fox-img {
+  width: min(260px, 70vw);
+  height: auto;
+  object-fit: contain;
+}
+
+.ftux-fox-video {
+  width: min(390px, 90vw);
+  height: auto;
+  object-fit: contain;
+  background: transparent;
+}
+
+/* 第二步视频：占据画面宽度 100%，去掉投影 */
+.ftux-fox-video-step2 {
+  width: 100%;
+  transform: scale(1.2);
+  transform-origin: center center;
+}
+
+.ftux-slide-step2 .ftux-fox-pose {
+  filter: none;
+  animation: none;
+  transform: none;
+}
+
+/* 第二步：将语音气泡悬浮在视频上方约 1/3 位置 */
+.ftux-slide-step2 .ftux-voice-bubble {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 0;
+  z-index: 5;
+  background-color: rgba(255, 255, 255, 0.96);
+}
+
+@keyframes ftux-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+}
+
+.ftux-text-area {
+  width: 100%;
+  padding: 0 40px 140px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease 0.2s;
+}
+
+.ftux-slide.active .ftux-text-area {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ftux-title {
+  font-family: var(--font-fredoka);
+  font-size: 1.8rem;
+  color: var(--ftux-text-dark);
+  margin-bottom: 12px;
+}
+
+.ftux-desc {
+  font-size: 1rem;
+  color: var(--ftux-text-sub);
+  line-height: 1.6;
+}
+
+.ftux-bottom {
+  position: fixed;
+  bottom: 40px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  z-index: 260;
+}
+
+.ftux-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.ftux-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e0e0e0;
+  transition: 0.3s;
+}
+
+.ftux-dot.active {
+  width: 24px;
+  background: var(--ftux-brand-gold);
+  border-radius: 4px;
+}
+
+.ftux-btn {
+  background: linear-gradient(180deg, #ffd700 0%, #ffb300 100%);
+  color: #5d4037;
+  font-family: var(--font-fredoka);
+  font-size: 1.2rem;
+  font-weight: 700;
+  padding: 16px 60px;
+  border-radius: 50px;
+  border: 4px solid #fff;
+  box-shadow: 0 6px 0 #ff8f00, 0 15px 30px rgba(255, 143, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+  min-width: 220px;
+}
+
+.ftux-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #ff8f00;
 }

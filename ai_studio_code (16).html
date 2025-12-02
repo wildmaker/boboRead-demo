@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>遇见小宝 - 沉浸版</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap');
+
+        :root {
+            --bg-color: #FFFDF8;
+            --dot-color: rgba(0,0,0,0.06);
+            --brand-gold: #FFD700;
+            --brand-orange: #FF6D00;
+            --brand-blue: #00ACC1;
+            --text-dark: #4E342E;
+            --text-sub: #8D6E63;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0; padding: 0; font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-color);
+            /* 网点背景：模拟笔记本纸张 */
+            background-image: radial-gradient(var(--dot-color) 2px, transparent 2px);
+            background-size: 24px 24px;
+            height: 100vh; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+
+        /* 跳过按钮 */
+        .skip-btn {
+            position: absolute; top: 50px; right: 24px;
+            color: #BCAAA4; font-weight: 800; font-size: 0.9rem;
+            z-index: 100; cursor: pointer; padding: 10px;
+        }
+
+        /* 轮播容器 */
+        .carousel-container {
+            flex: 1; display: flex; overflow-x: auto;
+            scroll-snap-type: x mandatory; scroll-behavior: smooth;
+            scrollbar-width: none;
+        }
+        .carousel-container::-webkit-scrollbar { display: none; }
+
+        /* 单页布局 */
+        .slide {
+            flex: 0 0 100%; width: 100%; height: 100%;
+            scroll-snap-align: center;
+            display: flex; flex-direction: column;
+            align-items: center;
+            position: relative;
+            padding-top: 15vh; /* 给狐狸留出顶部空间 */
+        }
+
+        /* === 核心：动态语音气泡 === */
+        .voice-bubble {
+            background: #FFF;
+            border: 2px solid var(--brand-blue);
+            border-radius: 20px 20px 20px 0; /* 气泡尾巴指向左下 */
+            padding: 12px 20px;
+            box-shadow: 0 8px 20px rgba(0, 172, 193, 0.15);
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 20px;
+            transform: scale(0.8); opacity: 0; transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
+        /* 激活时的状态 */
+        .slide.active .voice-bubble { transform: scale(1); opacity: 1; margin-bottom: 10px; }
+
+        /* 气泡小尾巴 */
+        .voice-bubble::after {
+            content: ''; position: absolute; bottom: -10px; left: 0;
+            width: 20px; height: 20px; background: #FFF;
+            border-left: 2px solid var(--brand-blue);
+            border-bottom: 2px solid var(--brand-blue);
+            border-bottom-left-radius: 50%;
+            clip-path: polygon(0 0, 100% 0, 100% 100%);
+        }
+
+        .speaker-icon { font-size: 1.2rem; }
+
+        /* 声波条 */
+        .wave-box { display: flex; align-items: center; gap: 4px; height: 16px; }
+        .bar {
+            width: 4px; height: 100%; background: var(--brand-blue); border-radius: 2px;
+            animation: none; transform: scaleY(0.4);
+        }
+        /* 只有在 active 时才跳动 */
+        .slide.active .bar { animation: wave 1s infinite ease-in-out; }
+        .slide.active .bar:nth-child(1) { animation-delay: 0.0s; }
+        .slide.active .bar:nth-child(2) { animation-delay: 0.1s; }
+        .slide.active .bar:nth-child(3) { animation-delay: 0.2s; }
+        .slide.active .bar:nth-child(4) { animation-delay: 0.3s; }
+        .slide.active .bar:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes wave { 0%, 100% { transform: scaleY(0.4); opacity: 0.6; } 50% { transform: scaleY(1); opacity: 1; } }
+
+        /* === 狐狸形象展示区 === */
+        .mascot-area {
+            flex: 1; width: 100%; display: flex; justify-content: center; align-items: center;
+            position: relative;
+        }
+        .fox-pose {
+            font-size: 10rem; /* 实际开发请用 img 标签 */
+            filter: drop-shadow(0 20px 30px rgba(93, 64, 55, 0.15));
+            animation: float 4s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-10px) rotate(2deg); } }
+
+        /* === 底部文字区 === */
+        .text-area {
+            width: 100%; padding: 0 40px 140px; /* 底部留白给按钮 */
+            text-align: center;
+            opacity: 0; transform: translateY(20px);
+            transition: all 0.5s ease 0.2s; /* 延迟出现 */
+        }
+        .slide.active .text-area { opacity: 1; transform: translateY(0); }
+
+        .title {
+            font-family: 'Fredoka', sans-serif; font-size: 1.8rem; color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+        .desc {
+            font-size: 1rem; color: var(--text-sub); line-height: 1.6;
+        }
+
+        /* === 底部固定控制区 === */
+        .bottom-controls {
+            position: fixed; bottom: 40px; left: 0; width: 100%;
+            display: flex; flex-direction: column; align-items: center; gap: 20px;
+            z-index: 20;
+        }
+
+        /* 进度点 */
+        .dots { display: flex; gap: 8px; }
+        .dot {
+            width: 8px; height: 8px; border-radius: 50%; background: #E0E0E0;
+            transition: 0.3s;
+        }
+        .dot.active { width: 24px; background: var(--brand-gold); border-radius: 4px; }
+
+        /* 主按钮 */
+        .btn-main {
+            background: linear-gradient(180deg, #FFD700 0%, #FFB300 100%);
+            color: #5D4037; font-family: 'Fredoka', sans-serif;
+            font-size: 1.2rem; font-weight: 700;
+            padding: 16px 60px; border-radius: 50px; border: 4px solid #FFF;
+            box-shadow: 0 6px 0 #FF8F00, 0 15px 30px rgba(255, 143, 0, 0.2);
+            cursor: pointer; transition: transform 0.1s;
+        }
+        .btn-main:active { transform: translateY(4px); box-shadow: 0 2px 0 #FF8F00; }
+
+    </style>
+</head>
+<body>
+
+    <div class="skip-btn" onclick="finish()">跳过</div>
+
+    <div class="carousel-container" id="carousel">
+        
+        <!-- ================= PAGE 1 ================= -->
+        <div class="slide active" id="slide-0">
+            <!-- 语音气泡 -->
+            <div class="voice-bubble">
+                <div class="speaker-icon">🔊</div>
+                <div class="wave-box">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+                <span style="font-size:0.8rem; font-weight:bold; color:#00ACC1;">我在说话哦~</span>
+            </div>
+
+            <!-- 狐狸姿态：招手 -->
+            <div class="mascot-area">
+                <div class="fox-pose">👋🦊</div> 
+                <!-- 实际图片建议：狐狸身体前倾，一只手高高举起打招呼，眼神看镜头 -->
+            </div>
+
+            <div class="text-area">
+                <div class="title">嗨！我是小宝</div>
+                <div class="desc">
+                    终于见到你啦！<br>我是一个会讲故事的小狐狸，<br>特别想和你做朋友。
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 2 ================= -->
+        <div class="slide" id="slide-1">
+            <div class="voice-bubble">
+                <div class="wave-box">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+            </div>
+
+            <!-- 狐狸姿态：拿着放大镜/相机 -->
+            <div class="mascot-area">
+                <div class="fox-pose">📸🦊</div>
+                <!-- 实际图片建议：狐狸双手捧着一个大大的放大镜或相机，看起来像在观察屏幕 -->
+            </div>
+
+            <div class="text-area">
+                <div class="title">我有神奇的眼睛</div>
+                <div class="desc">
+                    把你喜欢的绘本拿给我看看。<br>只要“咔嚓”一下，<br>我就能认出它是谁哦！
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 3 ================= -->
+        <div class="slide" id="slide-2">
+            <div class="voice-bubble">
+                <div class="wave-box">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
+            </div>
+
+            <!-- 狐狸姿态：戴耳机/拿着书 -->
+            <div class="mascot-area">
+                <div class="fox-pose">🎧🦊</div>
+                <!-- 实际图片建议：狐狸戴着大大的头戴式耳机，手里拿着一本打开的书，表情陶醉 -->
+            </div>
+
+            <div class="text-area">
+                <div class="title">我不怕生字</div>
+                <div class="desc">
+                    不管书上有多少字，<br>我都能把它们变成有趣的声音。<br>我们一起听故事吧！
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 底部控制区 -->
+    <div class="bottom-controls">
+        <div class="dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <button class="btn-main" id="btn-next" onclick="nextSlide()">你好呀！👋</button>
+    </div>
+
+    <script>
+        const carousel = document.getElementById('carousel');
+        const dots = document.querySelectorAll('.dot');
+        const btn = document.getElementById('btn-next');
+        let currentIndex = 0;
+        const totalSlides = 3;
+
+        carousel.addEventListener('scroll', () => {
+            const width = carousel.offsetWidth;
+            const newIndex = Math.round(carousel.scrollLeft / width);
+            
+            if (newIndex !== currentIndex) {
+                updateUI(newIndex);
+            }
+        });
+
+        function updateUI(index) {
+            currentIndex = index;
+            
+            // 1. 更新圆点
+            dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+            
+            // 2. 激活 CSS 动画 (关键：切换 class)
+            document.querySelectorAll('.slide').forEach((slide, i) => {
+                if (i === index) slide.classList.add('active');
+                else slide.classList.remove('active');
+            });
+
+            // 3. 更新交互式按钮文案
+            if (currentIndex === 0) btn.innerText = "你好呀！👋";
+            else if (currentIndex === 1) btn.innerText = "好神奇 ✨";
+            else if (currentIndex === 2) btn.innerText = "开始扫描 🚀";
+        }
+
+        function nextSlide() {
+            if (currentIndex < totalSlides - 1) {
+                carousel.scrollBy({ left: window.innerWidth, behavior: 'smooth' });
+            } else {
+                finish();
+            }
+        }
+
+        function finish() {
+            alert("流程结束，跳转首页");
+        }
+    </script>
+</body>
+</html>

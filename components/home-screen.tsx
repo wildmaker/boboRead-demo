@@ -1,13 +1,26 @@
 "use client"
 
+import Link from "next/link"
+
+export interface Book {
+  id: number
+  title: string
+  image: string
+  date: string
+  status?: "reading" | "new" | "completed"
+  progress?: number
+  tape: "yellow" | "cyan" | "pink" | "green"
+}
+
 interface HomeScreenProps {
   isActive: boolean
   onStartReading: () => void
+  onBookClick: (book: Book, cardRect: DOMRect) => void
   bookCount: 1 | 7
 }
 
-export function HomeScreen({ isActive, onStartReading, bookCount }: HomeScreenProps) {
-  const allBooks = [
+export function HomeScreen({ isActive, onStartReading, onBookClick, bookCount }: HomeScreenProps) {
+  const allBooks: Book[] = [
     {
       id: 1,
       title: "法老王的宝藏",
@@ -78,10 +91,13 @@ export function HomeScreen({ isActive, onStartReading, bookCount }: HomeScreenPr
           <p className="text-sm text-[#8D6E63] font-bold">已收集 {bookCount === 1 ? "1" : "12"} 个精彩故事</p>
         </div>
 
-        <div className="bg-white border-2 border-[#FFECB3] px-3 py-1.5 rounded-[20px] flex items-center gap-1.5 shadow-[0_4px_10px_rgba(255,193,7,0.15)]">
-          <span className="text-lg [filter:drop-shadow(0_2px_2px_rgba(255,87,34,0.2))]">🔥</span>
-          <span className="text-sm font-fredoka font-semibold text-[#FF6F00]">连续 3 天</span>
-        </div>
+        <Link
+          href="/profile"
+          className="bg-white border-2 border-[#FFECB3] px-3 py-1.5 rounded-[20px] flex items-center gap-1.5 shadow-[0_4px_10px_rgba(255,193,7,0.15)] hover:shadow-[0_6px_14px_rgba(255,193,7,0.25)] active:scale-95 transition-all"
+        >
+          <span className="text-lg [filter:drop-shadow(0_2px_2px_rgba(255,87,34,0.2))]">😊</span>
+          <span className="text-sm font-fredoka font-semibold text-[#5D4037]">我的</span>
+        </Link>
       </div>
 
       <div className="flex-1 overflow-y-auto px-6 pb-[130px] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden relative z-[1]">
@@ -93,6 +109,8 @@ export function HomeScreen({ isActive, onStartReading, bookCount }: HomeScreenPr
           {books.map((book, index) => (
             <div
               key={book.id}
+              data-book-id={book.id}
+              onClick={(event) => onBookClick(book, event.currentTarget.getBoundingClientRect())}
               className={`
                 group polaroid-card relative bg-white rounded-[18px] p-2.5 pb-10
                 shadow-[0_2px_5px_rgba(141,110,99,0.05),_0_10px_30px_rgba(141,110,99,0.12)]
@@ -144,7 +162,7 @@ export function HomeScreen({ isActive, onStartReading, bookCount }: HomeScreenPr
                     {book.status === "reading" && (
                       <>
                         <div className="w-1.5 h-1.5 rounded-full bg-[#FF9100] shadow-[0_0_5px_#FF9100]" />
-                        <span>{book.progress}%</span>
+                        <span>阅读中</span>
                       </>
                     )}
                     {book.status === "new" && <span className="text-[#00C853]">✨ NEW</span>}
@@ -171,15 +189,17 @@ export function HomeScreen({ isActive, onStartReading, bookCount }: HomeScreenPr
       </div>
 
       <div className="fixed bottom-[30px] left-1/2 -translate-x-1/2 flex flex-col items-center z-[100]">
-        {/* Hippo Head */}
-        <div className="text-[4rem] mb-[-22px] z-[2] animate-hippo-float [filter:drop-shadow(0_4px_0px_rgba(0,0,0,0.1))] pointer-events-none">
-          🦛
-        </div>
+        {/* Button + Fox wrapper */}
+        <div className="relative mt-1 flex items-center">
+          {/* Fennec Fox hiding behind the button */}
+          <img
+            src="/images/fox_01.png"
+            alt="小狐狸"
+            className="pointer-events-none absolute -left-24 bottom-[-18px] w-[180px] h-auto object-contain z-0 drop-shadow-[0_10px_25px_rgba(0,0,0,0.3)]"
+          />
 
-        {/* Button + Pulse wrapper，确保高亮与按钮完全对齐 */}
-        <div className="relative mt-1">
           {/* Pulse Ring：正好在按钮正下方，尺寸与按钮一致 */}
-          <div className="pointer-events-none absolute inset-0 rounded-[50px] bg-[rgba(255,215,0,0.4)] z-[-1] animate-pulse-ring-gold" />
+          <div className="pointer-events-none absolute inset-0 rounded-[50px] bg-[rgba(255,215,0,0.4)] z-[-2] animate-pulse-ring-gold" />
 
           {/* Main CTA Button */}
           <button
@@ -188,6 +208,7 @@ export function HomeScreen({ isActive, onStartReading, bookCount }: HomeScreenPr
               relative overflow-hidden
               bg-gradient-to-b from-[#FFD700] to-[#FFB300]
               text-[#5D4037] font-fredoka text-xl font-bold
+              flex items-center justify-center gap-2
               px-12 py-[18px] rounded-[50px]
               border-4 border-white
               shadow-[0_6px_0_#FF8F00,_0_20px_30px_rgba(255,143,0,0.25)]
@@ -195,9 +216,32 @@ export function HomeScreen({ isActive, onStartReading, bookCount }: HomeScreenPr
               transition-all duration-100
               active:translate-y-1 active:shadow-[0_2px_0_#FF8F00]
               shine-effect
+              z-[1]
             "
           >
-            开始读书
+            <svg
+              className="w-7 h-7"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 9.5C4 8.39543 4.89543 7.5 6 7.5H8L9 6H15L16 7.5H18C19.1046 7.5 20 8.39543 20 9.5V17.5C20 18.6046 19.1046 19.5 18 19.5H6C4.89543 19.5 4 18.6046 4 17.5V9.5Z"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <circle
+                cx="12"
+                cy="13.5"
+                r="3"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              />
+              <circle cx="18" cy="10" r="0.8" fill="currentColor" />
+            </svg>
+            <span>添加新书</span>
           </button>
         </div>
       </div>

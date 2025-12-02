@@ -1,23 +1,34 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ChevronLeft, Settings } from "lucide-react"
-import { OnboardingGuide } from "./onboarding-guide"
+import {
+  ChevronLeft,
+  Settings,
+  X,
+  Mic2,
+  Play,
+  Pause,
+  RotateCcw,
+} from "lucide-react"
 
 interface CameraScreenProps {
   isActive: boolean
   onBack: () => void
   onRead: () => void
+  onScanSuccess: () => void
 }
 
-export function CameraScreen({ isActive, onBack, onRead }: CameraScreenProps) {
+export function CameraScreen({ isActive, onBack, onRead, onScanSuccess }: CameraScreenProps) {
   const [showDrawer, setShowDrawer] = useState(false)
   const [showScanFrame, setShowScanFrame] = useState(true)
   const [readingMode, setReadingMode] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
   const [isListening, setIsListening] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
-  const [showOnboarding, setShowOnboarding] = useState(false)
+  const [showFoxGuide, setShowFoxGuide] = useState(false)
+  const [guideText, setGuideText] = useState("把封面放进框框里哦~")
+  const [scanSuccess, setScanSuccess] = useState(false)
+  const [isFlashing, setIsFlashing] = useState(false)
 
   const storyPages = [
     {
@@ -37,47 +48,78 @@ export function CameraScreen({ isActive, onBack, onRead }: CameraScreenProps) {
     },
   ]
 
-  // Simulate book detection
-  useEffect(() => {
-    if (isActive) {
-      const timer = setTimeout(() => {
-        setShowScanFrame(false)
-        setShowDrawer(true)
-      }, 2500)
-      return () => clearTimeout(timer)
-    } else {
-      // Reset state when leaving screen
-      setShowDrawer(false)
-      setShowScanFrame(true)
-      setReadingMode(false)
-      setCurrentPage(0)
-      setIsPlaying(false)
-      setIsListening(false)
-    }
-  }, [isActive])
+  const triggerCapture = () => {
+    // 闪光视觉反馈
+    setIsFlashing(true)
+    setTimeout(() => setIsFlashing(false), 300)
 
-  useEffect(() => {
-    if (showDrawer && !readingMode) {
-      const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding")
-      if (!hasSeenOnboarding) {
-        // Don't show onboarding yet, will show when clicking "Start Reading"
+    // 取景框高亮
+    setScanSuccess(true)
+
+    // 轻微振动反馈
+    if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+      try {
+        navigator.vibrate(50)
+      } catch {
+        // ignore on unsupported devices
       }
     }
-  }, [showDrawer, readingMode])
+
+    // 狐狸提示文案
+    setGuideText("找到啦！")
+
+    // 稍后通知父级：扫描成功，回到首页并弹出新书卡片
+    setTimeout(() => {
+      onScanSuccess()
+    }, 700)
+  }
+
+  // Simulate book detection once 进入摄像头界面
+  useEffect(() => {
+    if (isActive) {
+      // 初始化扫描状态
+      setReadingMode(false)
+      setShowDrawer(false)
+      setShowScanFrame(true)
+      setShowFoxGuide(false)
+      setGuideText("把封面放进框框里哦~")
+      setScanSuccess(false)
+      setIsFlashing(false)
+
+      // 狐狸稍后滑入
+      const guideTimer = setTimeout(() => {
+        setShowFoxGuide(true)
+      }, 600)
+
+      // 模拟识别过程
+      const scanTimer = setTimeout(() => {
+        triggerCapture()
+      }, 3200)
+
+      return () => {
+        clearTimeout(guideTimer)
+        clearTimeout(scanTimer)
+      }
+    }
+
+    // 离开摄像头界面时重置状态
+    setShowDrawer(false)
+    setShowScanFrame(true)
+    setReadingMode(false)
+    setCurrentPage(0)
+    setIsPlaying(false)
+    setIsListening(false)
+    setShowFoxGuide(false)
+    setIsFlashing(false)
+    setScanSuccess(false)
+  }, [isActive])
 
   const startReading = () => {
-    const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding")
-
-    if (!hasSeenOnboarding) {
-      // Show onboarding for first-time users
-      setShowOnboarding(true)
-    } else {
-      // Existing users go straight to reading
-      setShowDrawer(false)
-      setReadingMode(true)
-      setIsPlaying(true)
-      onRead()
-    }
+    // 直接进入阅读模式
+    setShowDrawer(false)
+    setReadingMode(true)
+    setIsPlaying(true)
+    onRead()
   }
 
   const togglePlay = () => {
@@ -102,14 +144,6 @@ export function CameraScreen({ isActive, onBack, onRead }: CameraScreenProps) {
     }
   }
 
-  const handleOnboardingComplete = () => {
-    setShowOnboarding(false)
-    setShowDrawer(false)
-    setReadingMode(true)
-    setIsPlaying(true)
-    onRead()
-  }
-
   const currentStory = storyPages[currentPage]
 
   return (
@@ -132,37 +166,65 @@ export function CameraScreen({ isActive, onBack, onRead }: CameraScreenProps) {
         />
       </div>
 
-      {/* Layer 1: HUD - Scan Frame */}
+      {/* Flash overlay */}
+      {isFlashing && (
+        <div className="absolute inset-0 bg-white z-40 pointer-events-none animate-flash" />
+      )}
+
+      {/* Layer 1: HUD - Scan Frame + focus mask */}
       {showScanFrame && (
         <div
           className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
-          style={{ transform: "translateY(-10%)" }}
+          style={{ transform: "translateY(-8%)" }}
         >
-          <div className="relative w-[70vw] aspect-[3/4] border-2 border-dashed border-white/60 rounded-[30px]">
-            <div
-              className="absolute -top-0.5 -left-0.5 w-10 h-10 border-4 border-white rounded-lg border-r-0 border-b-0"
-              style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.2))" }}
-            />
-            <div
-              className="absolute -top-0.5 -right-0.5 w-10 h-10 border-4 border-white rounded-lg border-l-0 border-b-0"
-              style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.2))" }}
-            />
-            <div
-              className="absolute -bottom-0.5 -left-0.5 w-10 h-10 border-4 border-white rounded-lg border-r-0 border-t-0"
-              style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.2))" }}
-            />
-            <div
-              className="absolute -bottom-0.5 -right-0.5 w-10 h-10 border-4 border-white rounded-lg border-l-0 border-t-0"
-              style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.2))" }}
-            />
-
+          <div
+            className={`relative w-[80vw] max-w-[340px] aspect-[3/4] rounded-[24px] border-2 border-dashed border-white/60 scan-focus-mask ${
+              scanSuccess ? "scan-focus-mask-success" : ""
+            }`}
+          >
             {/* Scanning laser line */}
-            <div className="absolute w-full h-1 bg-turquoise shadow-[0_0_15px_var(--turquoise)] top-0 left-0 animate-scan" />
+            {!scanSuccess && <div className="absolute top-0 left-0 w-full h-[2px] scan-line animate-scan" />}
           </div>
         </div>
       )}
 
-      {/* Layer 2: Top Navigation (Glass buttons) */}
+      {/* Top Navigation for scanning */}
+      {!readingMode && (
+        <div
+          className="absolute top-0 left-0 w-full flex justify-between items-center z-20 pointer-events-auto"
+          style={{ padding: "calc(env(safe-area-inset-top, 20px) + 10px) 20px" }}
+        >
+          <button
+            onClick={onBack}
+            className="w-10 h-10 bg-black/40 backdrop-blur-[8px] rounded-full flex items-center justify-center text-white border border-white/30"
+            aria-label="返回"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <div className="text-white text-[0.95rem] font-bold [text-shadow:0_2px_4px_rgba(0,0,0,0.5)]">
+            添加新书
+          </div>
+          <div style={{ width: 40 }} />
+        </div>
+      )}
+
+      {/* 狐狸引导气泡 */}
+      {!readingMode && (
+        <div
+          className={`absolute bottom-[110px] right-0 z-30 flex flex-col items-end transition-transform duration-500 ease-out ${
+            showFoxGuide ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <div className="bg-white px-3.5 py-2.5 rounded-[20px_20px_0_20px] shadow-[0_5px_15px_rgba(0,0,0,0.25)] mr-5 mb-[-8px] text-[0.8rem] font-bold text-[color:var(--text-dark)] max-w-[220px]">
+            {guideText}
+          </div>
+          <div className="text-[3.2rem] drop-shadow-[-5px_6px_12px_rgba(0,0,0,0.35)] mr-2">
+            🦊
+          </div>
+        </div>
+      )}
+
+      {/* Layer 2: Top Navigation (Glass buttons) for reading mode */}
       {readingMode && (
         <div
           className="absolute top-0 left-0 w-full flex justify-between z-20 pointer-events-auto"
@@ -214,7 +276,10 @@ export function CameraScreen({ isActive, onBack, onRead }: CameraScreenProps) {
           onClick={startReading}
           className="w-full py-4 bg-royal-gold text-egypt-blue rounded-[25px] font-black text-lg shadow-[0_5px_0_var(--dark-gold)] active:translate-y-1 active:shadow-none transition-all border-none"
         >
-          开始伴读 ▶
+          <span className="inline-flex items-center gap-2">
+            <span>开始伴读</span>
+            <Play className="w-5 h-5" />
+          </span>
         </button>
       </div>
 
@@ -294,7 +359,7 @@ export function CameraScreen({ isActive, onBack, onRead }: CameraScreenProps) {
                         : "0 6px 0 #0097A7, 0 10px 15px rgba(0, 151, 167, 0.2)"
                     }}
                   >
-                    🎙️
+                    <Mic2 className="w-6 h-6" />
                   </button>
                 </div>
 
@@ -319,7 +384,7 @@ export function CameraScreen({ isActive, onBack, onRead }: CameraScreenProps) {
                     e.currentTarget.style.boxShadow = "0 8px 0 #FF8F00, 0 16px 20px rgba(255, 143, 0, 0.3)"
                   }}
                 >
-                  {isPlaying ? "⏸" : "▶"}
+                {isPlaying ? <Pause className="w-7 h-7" /> : <Play className="w-7 h-7" />}
                 </button>
 
                 {/* Right Controls */}
@@ -347,7 +412,7 @@ export function CameraScreen({ isActive, onBack, onRead }: CameraScreenProps) {
                       e.currentTarget.style.boxShadow = "0 6px 0 #D84315, 0 10px 15px rgba(216, 67, 21, 0.2)"
                     }}
                   >
-                    🔄
+                  <RotateCcw className="w-6 h-6" />
                   </button>
                 </div>
               </div>
@@ -355,8 +420,6 @@ export function CameraScreen({ isActive, onBack, onRead }: CameraScreenProps) {
           </div>
         </div>
       )}
-
-      {showOnboarding && <OnboardingGuide onComplete={handleOnboardingComplete} />}
     </div>
   )
 }

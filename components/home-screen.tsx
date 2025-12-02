@@ -73,7 +73,7 @@ export function HomeScreen({ isActive, onStartReading, bookCount }: HomeScreenPr
       <div className="px-6 pt-[50px] pb-5 flex justify-between items-end bg-gradient-to-b from-[#FFFDF8] to-transparent relative z-10">
         <div>
           <h1 className="text-[1.8rem] font-black text-[#FF8F00] mb-1 [text-shadow:2px_2px_0px_rgba(255,236,179,0.5)] font-fredoka">
-            我的收藏册
+            图书馆
           </h1>
           <p className="text-sm text-[#8D6E63] font-bold">已收集 {bookCount === 1 ? "1" : "12"} 个精彩故事</p>
         </div>
@@ -171,37 +171,35 @@ export function HomeScreen({ isActive, onStartReading, bookCount }: HomeScreenPr
       </div>
 
       <div className="fixed bottom-[30px] left-1/2 -translate-x-1/2 flex flex-col items-center z-[100]">
-        {/* Pulse Ring */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90px] h-[90px] rounded-full bg-[rgba(255,215,0,0.4)] z-[-1] animate-pulse-ring-gold" />
-
-        {/* Fox Peeking - positioned to left of button, partially hidden */}
-        <div className="absolute left-[-85px] bottom-[5px] z-[1] animate-hippo-float pointer-events-none">
-          <img
-            src="/images/584f5698aba94993b10b2bcb3852ae6c-0-visiblewatermark.png"
-            alt="Fox mascot"
-            className="w-[100px] h-[100px] object-contain [filter:drop-shadow(0_4px_8px_rgba(0,0,0,0.1))]"
-          />
+        {/* Hippo Head */}
+        <div className="text-[4rem] mb-[-22px] z-[2] animate-hippo-float [filter:drop-shadow(0_4px_0px_rgba(0,0,0,0.1))] pointer-events-none">
+          🦛
         </div>
 
-        {/* Main CTA Button */}
-        <button
-          onClick={onStartReading}
-          className="
-            relative overflow-hidden
-            bg-gradient-to-b from-[#FFD700] to-[#FFB300]
-            text-[#5D4037] font-fredoka text-xl font-bold
-            px-12 py-[18px] rounded-[50px]
-            border-4 border-white
-            shadow-[0_6px_0_#FF8F00,_0_20px_30px_rgba(255,143,0,0.25)]
-            min-w-[220px]
-            transition-all duration-100
-            active:translate-y-1 active:shadow-[0_2px_0_#FF8F00]
-            shine-effect
-            z-[2]
-          "
-        >
-          开始读书
-        </button>
+        {/* Button + Pulse wrapper，确保高亮与按钮完全对齐 */}
+        <div className="relative mt-1">
+          {/* Pulse Ring：正好在按钮正下方，尺寸与按钮一致 */}
+          <div className="pointer-events-none absolute inset-0 rounded-[50px] bg-[rgba(255,215,0,0.4)] z-[-1] animate-pulse-ring-gold" />
+
+          {/* Main CTA Button */}
+          <button
+            onClick={onStartReading}
+            className="
+              relative overflow-hidden
+              bg-gradient-to-b from-[#FFD700] to-[#FFB300]
+              text-[#5D4037] font-fredoka text-xl font-bold
+              px-12 py-[18px] rounded-[50px]
+              border-4 border-white
+              shadow-[0_6px_0_#FF8F00,_0_20px_30px_rgba(255,143,0,0.25)]
+              min-w-[220px]
+              transition-all duration-100
+              active:translate-y-1 active:shadow-[0_2px_0_#FF8F00]
+              shine-effect
+            "
+          >
+            开始读书
+          </button>
+        </div>
       </div>
     </div>
   )

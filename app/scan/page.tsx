@@ -97,20 +97,20 @@ export default function ScanPage() {
             </div>
           </div>
 
-          {/* 狐狸和提示语 - 固定在扫描框下方 */}
-          <div className="relative z-20 mt-6 flex flex-col items-center animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="bg-white px-3.5 py-2.5 rounded-[20px_20px_0_20px] shadow-[0_5px_15px_rgba(0,0,0,0.25)] mb-[-8px] text-[0.8rem] font-bold text-[color:var(--text-dark)] max-w-[220px]">
-              {guideText}
-            </div>
-            <div className="drop-shadow-[-5px_6px_12px_rgba(0,0,0,0.35)]">
+          {/* 狐狸和提示语 - 固定在扫描框下方，狐狸在左侧，文字在右侧 */}
+          <div className="relative z-20 mt-6 flex items-center gap-4 px-4">
+            <div className="drop-shadow-[-5px_6px_12px_rgba(0,0,0,0.35)] flex-shrink-0">
               <Image
                 src="/images/fox_01.png"
                 alt="小狐狸"
-                width={80}
-                height={80}
+                width={72}
+                height={72}
                 className="object-contain"
                 priority
               />
+            </div>
+            <div className="bg-white px-3.5 py-2.5 rounded-[20px_20px_20px_0] shadow-[0_5px_15px_rgba(0,0,0,0.25)] text-[0.85rem] font-bold text-[color:var(--text-dark)] max-w-[240px] text-left leading-relaxed">
+              {guideText}
             </div>
           </div>
         </div>

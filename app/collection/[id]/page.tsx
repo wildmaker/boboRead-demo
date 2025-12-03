@@ -305,7 +305,7 @@ export default function CollectionDetailPage() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center space-y-4">
           <p className="text-muted-foreground">合辑不存在</p>
-          <Button onClick={() => router.push("/home")}>返回首页</Button>
+          <Button onClick={() => router.push("/")}>返回首页</Button>
         </div>
       </div>
     )

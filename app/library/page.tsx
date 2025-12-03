@@ -178,7 +178,7 @@ export default function LibraryPage() {
       <nav className="fixed bottom-0 left-0 right-0 bg-card border-t px-6 py-3">
         <div className="flex items-center justify-around">
           <Link
-            href="/home"
+            href="/"
             className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors"
           >
             <BookOpen className="w-6 h-6" />

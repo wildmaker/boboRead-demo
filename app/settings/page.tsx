@@ -105,7 +105,7 @@ export default function SettingsPage() {
     <div className="min-h-screen flex flex-col bg-[#FDFCF8] bg-[radial-gradient(#8D6E63_0.5px,transparent_0.5px)] [background-size:20px_20px] pb-10">
       {/* Header */}
       <header className="sticky top-0 z-10 px-6 py-4 flex items-center gap-4 bg-[#FDFCF8]/90 backdrop-blur-md">
-        <Link href="/home">
+        <Link href="/">
           <Button variant="ghost" size="icon" className="rounded-full w-10 h-10 bg-white shadow-sm border border-[#8D6E63]/10 hover:bg-[#FFF8E1] hover:text-[#FF8F00]">
             <ArrowLeft className="w-5 h-5 text-[#5D4037]" />
           </Button>

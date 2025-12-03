@@ -117,7 +117,7 @@ export default function TutorialPage() {
           <p className="leading-relaxed">将平板或手机放入支架凹槽处即可开始阅读</p>
         </div>
         <Button
-          onClick={() => router.push("/home")}
+          onClick={() => router.push("/")}
           className="w-full h-14 text-lg font-bold bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 rounded-full shadow-lg"
         >
           开始使用

@@ -104,7 +104,7 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
       {/* Header */}
       <div className="relative">
         <div className="absolute top-4 left-4 z-10">
-          <Link href="/home">
+          <Link href="/">
             <Button variant="secondary" size="icon" className="rounded-full shadow-lg">
               <ArrowLeft className="w-5 h-5" />
             </Button>

@@ -121,7 +121,7 @@ export default function ReadingCompletePage() {
 
           {/* Action Buttons */}
           <div className="space-y-3">
-            <Button size="lg" className="w-full h-12 rounded-xl" onClick={() => router.push("/home")}>
+            <Button size="lg" className="w-full h-12 rounded-xl" onClick={() => router.push("/")}>
               继续探索更多图书
             </Button>
             {bookId && (

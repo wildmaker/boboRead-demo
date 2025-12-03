@@ -53,7 +53,7 @@ export default function VIPPage() {
   const handleSubscribe = () => {
     setIsProcessing(true)
     setTimeout(() => {
-      router.push("/home")
+      router.push("/")
     }, 2000)
   }
 
@@ -61,7 +61,7 @@ export default function VIPPage() {
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10">
       {/* Header */}
       <header className="p-4 flex items-center justify-between">
-        <Link href="/home">
+        <Link href="/">
           <Button variant="ghost" size="icon" className="rounded-full">
             <ArrowLeft className="h-5 w-5" />
           </Button>

@@ -11,7 +11,7 @@ export default function PrivacyAgreementPage() {
 
   const handleContinue = () => {
     if (agreed) {
-      window.location.href = "/home"
+      window.location.href = "/"
     }
   }
 

@@ -15,6 +15,8 @@ export default function Page() {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null)
   const [selectedCardRect, setSelectedCardRect] = useState<CardRect | null>(null)
   const [showBookDetail, setShowBookDetail] = useState(false)
+  const [onboardingSource, setOnboardingSource] = useState<"startReading" | "addBook" | null>(null)
+  const [pendingReadingBook, setPendingReadingBook] = useState<Book | null>(null)
 
   // 首次进入 App 时展示 FTUX 流程
   useEffect(() => {
@@ -30,21 +32,27 @@ export default function Page() {
   }, [])
 
   const handleAddNewBook = () => {
-    const hasSeenOnboarding = typeof window !== "undefined" ? localStorage.getItem("hasSeenOnboarding") : "true"
-
-    if (!hasSeenOnboarding) {
-      // 首次用户：先展示摄像头使用引导
-      setShowOnboarding(true)
-    } else {
-      // 已看过引导：直接进入摄像头界面
-      setActiveScreen("camera")
-    }
+    // 点击"添加新书"时，不再展示新手引导，直接进入摄像头界面
+    setActiveScreen("camera")
   }
 
   const handleOnboardingComplete = () => {
     setShowOnboarding(false)
-    // 引导结束后进入摄像头界面开始扫描
-    setActiveScreen("camera")
+    
+    // 根据引导来源决定后续操作
+    if (onboardingSource === "startReading" && pendingReadingBook) {
+      // 通过"开始阅读"触发的引导：完成引导后开始阅读
+      // 关闭图书详情弹窗
+      setShowBookDetail(false)
+      console.log("开始阅读:", pendingReadingBook.title)
+      // TODO: 实现开始阅读逻辑（例如跳转到阅读页面）
+      setPendingReadingBook(null)
+    } else {
+      // 通过"添加新书"触发的引导：完成引导后进入摄像头界面
+      setActiveScreen("camera")
+    }
+    
+    setOnboardingSource(null)
   }
 
   const rectFromDom = (bookId: number): CardRect | null => {
@@ -68,6 +76,7 @@ export default function Page() {
     const newBook: Book = {
       id: 1,
       title: "法老王的宝藏",
+      author: "童话叔叔",
       image: "/egyptian-pharaoh-treasure-ancient-egypt.jpg",
       date: "刚刚添加到图书馆",
       status: "new",
@@ -105,8 +114,28 @@ export default function Page() {
   }
 
   const handleStartReading = (book: Book) => {
-    // TODO: 实现开始阅读逻辑
-    console.log("开始阅读:", book.title)
+    // 检查用户是否首次点击"开始阅读"
+    try {
+      if (typeof window !== "undefined") {
+        const hasStartedReading = localStorage.getItem("hasStartedReading")
+        const hasSeenOnboarding = localStorage.getItem("hasSeenOnboarding")
+        
+        if (!hasStartedReading && !hasSeenOnboarding) {
+          // 首次点击"开始阅读"：展示新手引导流程
+          localStorage.setItem("hasStartedReading", "true")
+          setPendingReadingBook(book)
+          setOnboardingSource("startReading")
+          setShowOnboarding(true)
+        } else {
+          // 已看过引导或已开始阅读过：直接开始阅读
+          console.log("开始阅读:", book.title)
+          // TODO: 实现开始阅读逻辑（例如跳转到阅读页面）
+        }
+      }
+    } catch {
+      // 忽略本地存储异常
+      console.log("开始阅读:", book.title)
+    }
   }
 
   return (

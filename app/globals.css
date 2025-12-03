@@ -427,6 +427,34 @@
   opacity: 0.8;
 }
 
+/* 金色光束扫描线 */
+.laser-beam {
+  position: absolute;
+  top: 0;
+  left: -10%;
+  width: 120%;
+  height: 60px;
+  background: linear-gradient(180deg, rgba(255, 215, 0, 0.4) 0%, transparent 100%);
+  border-top: 3px solid #FFD700;
+  filter: drop-shadow(0 0 8px #FFD700);
+  animation: scan-vertical 3s infinite ease-in-out;
+  opacity: 0.8;
+}
+
+@keyframes scan-vertical {
+  0% {
+    top: 0;
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    top: calc(100% - 60px);
+    opacity: 0.8;
+  }
+}
+
 .animate-flash {
   animation: flash-overlay 0.3s ease-out forwards;
 }

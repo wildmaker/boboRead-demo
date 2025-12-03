@@ -1,10 +1,12 @@
 "use client"
 
 import Link from "next/link"
+import { Settings } from "lucide-react"
 
 export interface Book {
   id: number
   title: string
+  author?: string
   image: string
   date: string
   status?: "reading" | "new" | "completed"
@@ -24,6 +26,7 @@ export function HomeScreen({ isActive, onStartReading, onBookClick, bookCount }:
     {
       id: 1,
       title: "法老王的宝藏",
+      author: "童话叔叔",
       image: "/egyptian-pharaoh-treasure-ancient-egypt.jpg",
       date: "昨天 20:30",
       status: "reading" as const,
@@ -33,6 +36,7 @@ export function HomeScreen({ isActive, onStartReading, onBookClick, bookCount }:
     {
       id: 2,
       title: "海底两万里",
+      author: "儒勒·凡尔纳",
       image: "/underwater-ocean-submarine-sea-adventure.jpg",
       date: "刚刚添加",
       status: "new" as const,
@@ -41,6 +45,7 @@ export function HomeScreen({ isActive, onStartReading, onBookClick, bookCount }:
     {
       id: 3,
       title: "魔法红舞鞋",
+      author: "糖果姐姐",
       image: "/magic-red-shoes-fairy-tale-ballet.jpg",
       date: "3天前读过",
       status: "completed" as const,
@@ -49,6 +54,7 @@ export function HomeScreen({ isActive, onStartReading, onBookClick, bookCount }:
     {
       id: 4,
       title: "火星大救援",
+      author: "星际小队",
       image: "/mars-planet-space-rescue-mission.jpg",
       date: "Oct 24",
       tape: "green" as const,
@@ -56,6 +62,7 @@ export function HomeScreen({ isActive, onStartReading, onBookClick, bookCount }:
     {
       id: 5,
       title: "狮子王辛巴",
+      author: "草原故事会",
       image: "/lion-king-simba-africa-savanna.jpg",
       date: "Oct 20",
       status: "reading" as const,
@@ -64,6 +71,7 @@ export function HomeScreen({ isActive, onStartReading, onBookClick, bookCount }:
     {
       id: 6,
       title: "晚安月亮",
+      author: "睡前故事屋",
       image: "/goodnight-moon-night-sky-bedtime.jpg",
       date: "Sep 15",
       status: "completed" as const,
@@ -72,6 +80,7 @@ export function HomeScreen({ isActive, onStartReading, onBookClick, bookCount }:
     {
       id: 7,
       title: "小王子",
+      author: "安托万·德·圣-埃克苏佩里",
       image: "/little-prince-stars-planet-rose.jpg",
       date: "Sep 10",
       status: "reading" as const,
@@ -83,7 +92,7 @@ export function HomeScreen({ isActive, onStartReading, onBookClick, bookCount }:
 
   return (
     <div className={`fixed inset-0 flex-col ${isActive ? "flex" : "hidden"}`}>
-      <div className="px-6 pt-[50px] pb-5 flex justify-between items-end bg-gradient-to-b from-[#FFFDF8] to-transparent relative z-10">
+      <div className="px-6 pt-[50px] pb-5 flex justify-between items-center bg-gradient-to-b from-[#FFFDF8] to-transparent relative z-10">
         <div>
           <h1 className="text-[1.8rem] font-black text-[#FF8F00] mb-1 [text-shadow:2px_2px_0px_rgba(255,236,179,0.5)] font-fredoka">
             图书馆
@@ -92,11 +101,11 @@ export function HomeScreen({ isActive, onStartReading, onBookClick, bookCount }:
         </div>
 
         <Link
-          href="/profile"
-          className="bg-white border-2 border-[#FFECB3] px-3 py-1.5 rounded-[20px] flex items-center gap-1.5 shadow-[0_4px_10px_rgba(255,193,7,0.15)] hover:shadow-[0_6px_14px_rgba(255,193,7,0.25)] active:scale-95 transition-all"
+          href="/settings"
+          className="px-2 py-1 rounded-full flex items-center justify-center text-[#5D4037] hover:bg-white/70 active:opacity-80 transition-colors"
+          aria-label="设置"
         >
-          <span className="text-lg [filter:drop-shadow(0_2px_2px_rgba(255,87,34,0.2))]">😊</span>
-          <span className="text-sm font-fredoka font-semibold text-[#5D4037]">我的</span>
+          <Settings className="w-5 h-5" />
         </Link>
       </div>
 

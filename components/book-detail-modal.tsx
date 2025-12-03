@@ -151,6 +151,9 @@ export function BookDetailModal({ book, isOpen, onClose, onStartReading, targetR
             <div className="font-nunito font-black text-[#4E342E] text-[0.9rem] mb-0.5 leading-tight">
               {book.title}
             </div>
+            {book.author && (
+              <div className="font-fredoka text-[0.7rem] text-[#8D6E63] mb-0.5 tracking-wide">{book.author}</div>
+            )}
             <div className="font-fredoka text-[0.7rem] text-[#9E9E9E] tracking-wide">{book.date}</div>
           </div>
         </div>

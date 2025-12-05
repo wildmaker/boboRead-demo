@@ -16,23 +16,12 @@ import {
 } from "@/components/ui/dialog"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import {
-  ArrowLeft,
-  Shield,
-  HelpCircle,
-  Trash2,
-  LogOut,
-  ChevronRight,
-  CalendarIcon,
-  Baby,
-  MessageCircle,
-  ShoppingCart,
-  Crown,
-} from "lucide-react"
+import { ArrowLeft, Shield, Trash2, LogOut, ChevronRight, CalendarIcon, MessageCircle, ShoppingCart, Crown, X } from "lucide-react"
 import Link from "next/link"
 import { format } from "date-fns"
 import { zhCN } from "date-fns/locale"
 import { cn } from "@/lib/utils"
+import * as Drawer from "vaul"
 
 export default function SettingsPage() {
   const [showBabyInfo, setShowBabyInfo] = useState(false)
@@ -102,7 +91,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FDFCF8] bg-[radial-gradient(#8D6E63_0.5px,transparent_0.5px)] [background-size:20px_20px] pb-10">
+    <div className="h-screen flex flex-col bg-[#FDFCF8] bg-[radial-gradient(#8D6E63_0.5px,transparent_0.5px)] [background-size:20px_20px] pb-10">
       {/* Header */}
       <header className="sticky top-0 z-10 px-6 py-4 flex items-center gap-4 bg-[#FDFCF8]/90 backdrop-blur-md">
         <Link href="/">
@@ -114,10 +103,14 @@ export default function SettingsPage() {
       </header>
 
       {/* Main Content */}
-      <main className="px-6 py-4 flex-1 flex flex-col gap-6">
+      <main className="px-6 py-4 flex-1 flex flex-col gap-6 overflow-y-auto">
         <div className="space-y-6">
           {/* Profile Card */}
-          <Link href="/profile">
+          <button
+            type="button"
+            onClick={() => setShowBabyInfo(true)}
+            className="w-full text-left"
+          >
             <SettingsCard className="p-5 flex items-center gap-5 relative overflow-hidden group cursor-pointer hover:shadow-md transition-shadow">
               {/* Avatar Area */}
               <div className="relative">
@@ -135,6 +128,16 @@ export default function SettingsPage() {
               <div className="flex-1 space-y-1">
                 <div className="flex items-center gap-2">
                   <h2 className="text-xl font-black text-[#5D4037] font-fredoka">{name}</h2>
+                  <span
+                    className={cn(
+                      "px-2 py-0.5 rounded-full text-[11px] font-bold",
+                      gender === "boy"
+                        ? "bg-[#E0F7FA] text-[#00838F]"
+                        : "bg-[#FCE4EC] text-[#AD1457]",
+                    )}
+                  >
+                    {gender === "boy" ? "男孩" : "女孩"}
+                  </span>
                 </div>
                 <div className="text-xs text-[#8D6E63] font-medium flex items-center gap-2">
                   <span className="bg-[#8D6E63]/5 px-2 py-0.5 rounded-md">书龄 128 天</span>
@@ -145,37 +148,29 @@ export default function SettingsPage() {
 
               <ChevronRight className="w-5 h-5 text-[#8D6E63]/30 group-hover:text-[#FF8F00] transition-colors relative z-0" />
             </SettingsCard>
-          </Link>
+          </button>
 
-          {/* Account Section */}
+          {/* Hardware Section */}
           <section className="space-y-3">
-            <h2 className="text-lg font-black text-[#8D6E63] px-2 font-fredoka flex items-center gap-2">
-              <span className="w-1.5 h-4 rounded-full bg-[#FF8F00]" />
-              账号与安全
+            <h2 className="text-lg font-black text-[#8D6E63] px-2 font-fredoka">
+              硬件设备
             </h2>
             <SettingsCard>
               <SettingsItem 
-                icon={Baby} 
-                title="宝宝信息" 
-                value={name}
-                onClick={() => setShowBabyInfo(true)} 
-              />
-              <div className="h-px bg-[#8D6E63]/5 mx-4" />
-              <SettingsItem 
-                icon={Shield} 
-                iconColor="text-[#4DD0E1]"
-                iconBg="bg-[#E0F7FA]"
-                title="隐私协议" 
-                href="/privacy" 
+                icon={ShoppingCart}
+                iconColor="text-[#FF9800]"
+                iconBg="bg-[#FFF3E0]"
+                title="购买阅读支架"
+                subtitle="联系客服购买配套硬件设备"
+                onClick={handleContactService}
               />
             </SettingsCard>
           </section>
 
-          {/* General Section */}
+          {/* Unified Settings List */}
           <section className="space-y-3">
-            <h2 className="text-lg font-black text-[#8D6E63] px-2 font-fredoka flex items-center gap-2">
-              <span className="w-1.5 h-4 rounded-full bg-[#4DD0E1]" />
-              通用
+            <h2 className="text-lg font-black text-[#8D6E63] px-2 font-fredoka">
+              设置
             </h2>
             <SettingsCard>
               <SettingsItem 
@@ -186,23 +181,13 @@ export default function SettingsPage() {
                 value="23.5 MB"
                 onClick={() => {}} 
               />
-            </SettingsCard>
-          </section>
-
-          {/* Hardware Section */}
-          <section className="space-y-3">
-            <h2 className="text-lg font-black text-[#8D6E63] px-2 font-fredoka flex items-center gap-2">
-              <span className="w-1.5 h-4 rounded-full bg-[#FFCA28]" />
-              其他
-            </h2>
-            <SettingsCard>
+              <div className="h-px bg-[#8D6E63]/5 mx-4" />
               <SettingsItem 
-                icon={ShoppingCart} 
-                iconColor="text-[#FF9800]"
-                iconBg="bg-[#FFF3E0]"
-                title="购买阅读支架" 
-                subtitle="联系客服购买配套硬件设备"
-                onClick={handleContactService} 
+                icon={({ className }: any) => <span className={className}>📖</span>}
+                iconColor="text-xl"
+                iconBg="bg-transparent"
+                title="使用说明"
+                href="/tutorial"
               />
                <div className="h-px bg-[#8D6E63]/5 mx-4" />
               <SettingsItem 
@@ -213,34 +198,9 @@ export default function SettingsPage() {
                 subtitle="咨询产品或售后服务"
                 onClick={handleContactService} 
               />
-            </SettingsCard>
-          </section>
-
-          {/* Help Section */}
-          <section className="space-y-3">
-            <h2 className="text-lg font-black text-[#8D6E63] px-2 font-fredoka flex items-center gap-2">
-              <span className="w-1.5 h-4 rounded-full bg-[#F48FB1]" />
-              帮助与反馈
-            </h2>
-            <SettingsCard>
+              <div className="h-px bg-[#8D6E63]/5 mx-4" />
               <SettingsItem 
-                icon={({className}: any) => <span className={className}>📖</span>}
-                iconColor="text-xl"
-                iconBg="bg-transparent"
-                title="使用说明" 
-                href="/tutorial" 
-              />
-               <div className="h-px bg-[#8D6E63]/5 mx-4" />
-              <SettingsItem 
-                 icon={HelpCircle} 
-                 iconColor="text-[#AB47BC]"
-                 iconBg="bg-[#F3E5F5]"
-                title="帮助中心" 
-                href="/help" 
-              />
-               <div className="h-px bg-[#8D6E63]/5 mx-4" />
-              <SettingsItem 
-                icon={({className}: any) => <span className={className}>💬</span>}
+                icon={({ className }: any) => <span className={className}>💬</span>}
                  iconColor="text-xl"
                  iconBg="bg-transparent"
                 title="意见反馈" 
@@ -248,12 +208,20 @@ export default function SettingsPage() {
               />
                <div className="h-px bg-[#8D6E63]/5 mx-4" />
               <SettingsItem 
-                icon={({className}: any) => <span className={className}>ℹ️</span>}
+                icon={({ className }: any) => <span className={className}>ℹ️</span>}
                  iconColor="text-xl"
                  iconBg="bg-transparent"
                 title="关于我们" 
                 value="v1.0.0"
                 href="/about" 
+              />
+              <div className="h-px bg-[#8D6E63]/5 mx-4" />
+              <SettingsItem
+                icon={Shield}
+                iconColor="text-[#4DD0E1]"
+                iconBg="bg-[#E0F7FA]"
+                title="隐私协议"
+                href="/privacy"
               />
             </SettingsCard>
           </section>
@@ -262,7 +230,7 @@ export default function SettingsPage() {
         {/* Logout Button */}
         <button
             onClick={() => setShowLogoutDialog(true)}
-            className="w-full mt-auto bg-[#FFEBEE] text-[#D32F2F] font-bold font-fredoka py-4 rounded-[20px] 
+          className="w-full mt-auto mb-16 bg-[#FFEBEE] text-[#D32F2F] font-bold font-fredoka py-4 rounded-[20px] 
             border-2 border-[#FFCDD2] shadow-[0_4px_0_#FFCDD2] active:translate-y-1 active:shadow-none transition-all
             flex items-center justify-center gap-2"
         >
@@ -271,17 +239,48 @@ export default function SettingsPage() {
         </button>
       </main>
 
-      {/* Baby Info Dialog */}
-      <Dialog open={showBabyInfo} onOpenChange={setShowBabyInfo}>
-        <DialogContent className="sm:max-w-md bg-[#FFFDF8] border-none rounded-[24px] shadow-xl">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-black text-[#5D4037] font-fredoka text-center">宝宝信息</DialogTitle>
-            <DialogDescription className="text-[#8D6E63] text-center">修改宝宝的个人信息</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
+      {/* Baby Info Drawer (bottom sheet) */}
+      <Drawer.Root open={showBabyInfo} onOpenChange={setShowBabyInfo} shouldScaleBackground>
+        <Drawer.Portal>
+          <Drawer.Overlay className="fixed inset-0 z-40 bg-black/35 backdrop-blur-[1px]" />
+          <Drawer.Content className="fixed inset-x-0 bottom-0 z-50 rounded-t-[32px] bg-[#FFFDF8] border-t-2 border-[#8D6E63]/10 shadow-[0_-18px_40px_rgba(93,64,55,0.35)]">
+            <div className="mx-auto w-full max-w-md px-6 pt-5 pb-[max(env(safe-area-inset-bottom,1.25rem),1.5rem)]">
+              {/* Top bar with close + hint */}
+              <div className="flex items-center justify-between mb-4">
+                <button
+                  type="button"
+                  aria-label="关闭"
+                  onClick={() => setShowBabyInfo(false)}
+                  className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/80 border border-[#E0CEC7] shadow-sm text-[#8D6E63] hover:bg-white transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+                <span className="text-xs font-medium text-[#BCAAA4]">需要帮助？</span>
+              </div>
+
+              {/* Avatar + Title block */}
+              <div className="text-center space-y-3 mb-6">
+                <div className="mx-auto w-24 h-24 rounded-full border-4 border-white bg-[#FFF8E1] shadow-md overflow-hidden -mt-8">
+                  <img
+                    src="/placeholder-user.jpg"
+                    alt="宝宝头像"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <h2 className="text-2xl font-black text-[#5D4037] font-fredoka">编辑宝宝资料</h2>
+                  <p className="text-sm text-[#8D6E63]">
+                    完善信息后，我们会推荐更适合 TA 的绘本
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
             {/* Baby Name */}
             <div className="space-y-2">
-              <Label htmlFor="edit-name" className="text-[#5D4037] font-bold">宝宝姓名/昵称</Label>
+                  <Label htmlFor="edit-name" className="text-[#5D4037] font-bold">
+                    宝宝姓名/昵称
+                  </Label>
               <Input
                 id="edit-name"
                 value={name}
@@ -299,14 +298,17 @@ export default function SettingsPage() {
                     variant="outline"
                     className={cn(
                         "w-full h-12 rounded-xl justify-start text-left font-normal border-2 border-[#8D6E63]/20 text-[#5D4037] hover:bg-[#8D6E63]/5 hover:text-[#5D4037]",
-                        !birthDate && "text-muted-foreground"
+                          !birthDate && "text-muted-foreground",
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4 text-[#FF8F00]" />
                     {birthDate ? format(birthDate, "yyyy年MM月dd日", { locale: zhCN }) : "选择日期"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 bg-[#FFFDF8] border-2 border-[#8D6E63]/10 shadow-xl rounded-xl" align="start">
+                    <PopoverContent
+                      className="w-auto p-0 bg-[#FFFDF8] border-2 border-[#8D6E63]/10 shadow-xl rounded-xl"
+                      align="start"
+                    >
                   <Calendar
                     mode="single"
                     selected={birthDate}
@@ -352,18 +354,26 @@ export default function SettingsPage() {
               </RadioGroup>
             </div>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowBabyInfo(false)} 
-                className="rounded-xl border-2 border-[#8D6E63]/20 text-[#8D6E63] hover:bg-[#8D6E63]/10 hover:text-[#5D4037] h-11 w-full sm:w-auto">
-              取消
-            </Button>
-            <Button onClick={handleSave} 
-                className="rounded-xl bg-[#FF8F00] hover:bg-[#FFA000] text-white font-bold h-11 shadow-[0_4px_0_#E65100] w-full sm:w-auto active:shadow-none active:translate-y-1 transition-all">
-              保存
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+
+              <div className="mt-6 space-y-3">
+                <Button
+                  onClick={handleSave}
+                  className="w-full h-12 rounded-full bg-[#FF8F00] hover:bg-[#FFA000] text-white font-bold text-base shadow-[0_6px_0_#E65100] active:shadow-none active:translate-y-1 transition-all"
+                >
+                  完成
+                </Button>
+                <button
+                  type="button"
+                  onClick={() => setShowBabyInfo(false)}
+                  className="w-full text-xs text-[#8D6E63] text-center hover:text-[#5D4037] transition-colors"
+                >
+                  先不设置，返回上一步
+                </button>
+              </div>
+            </div>
+          </Drawer.Content>
+        </Drawer.Portal>
+      </Drawer.Root>
 
       {/* Logout Confirmation Dialog */}
       <Dialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>

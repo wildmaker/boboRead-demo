@@ -25,7 +25,6 @@ export function CameraScreen({ isActive, onBack, onRead, onScanSuccess }: Camera
   const [isPlaying, setIsPlaying] = useState(false)
   const [isListening, setIsListening] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
-  const [showFoxGuide, setShowFoxGuide] = useState(false)
   const [guideText, setGuideText] = useState("把封面放进框框里哦~")
   const [scanSuccess, setScanSuccess] = useState(false)
   const [isFlashing, setIsFlashing] = useState(false)
@@ -74,32 +73,16 @@ export function CameraScreen({ isActive, onBack, onRead, onScanSuccess }: Camera
     }, 700)
   }
 
-  // Simulate book detection once 进入摄像头界面
   useEffect(() => {
     if (isActive) {
       // 初始化扫描状态
       setReadingMode(false)
       setShowDrawer(false)
       setShowScanFrame(true)
-      setShowFoxGuide(false)
-      setGuideText("把封面放进框框里哦~")
       setScanSuccess(false)
+      setGuideText("把封面放进框框里哦~")
       setIsFlashing(false)
-
-      // 狐狸稍后滑入
-      const guideTimer = setTimeout(() => {
-        setShowFoxGuide(true)
-      }, 600)
-
-      // 模拟识别过程
-      const scanTimer = setTimeout(() => {
-        triggerCapture()
-      }, 3200)
-
-      return () => {
-        clearTimeout(guideTimer)
-        clearTimeout(scanTimer)
-      }
+      return
     }
 
     // 离开摄像头界面时重置状态
@@ -109,7 +92,6 @@ export function CameraScreen({ isActive, onBack, onRead, onScanSuccess }: Camera
     setCurrentPage(0)
     setIsPlaying(false)
     setIsListening(false)
-    setShowFoxGuide(false)
     setIsFlashing(false)
     setScanSuccess(false)
   }, [isActive])
@@ -146,6 +128,11 @@ export function CameraScreen({ isActive, onBack, onRead, onScanSuccess }: Camera
 
   const currentStory = storyPages[currentPage]
 
+  const handleShutterClick = () => {
+    if (readingMode || scanSuccess) return
+    triggerCapture()
+  }
+
   return (
     <div className={`fixed inset-0 ${isActive ? "flex" : "hidden"} flex-col`}>
       {/* Layer 0: Camera Background with vignette */}
@@ -177,13 +164,66 @@ export function CameraScreen({ isActive, onBack, onRead, onScanSuccess }: Camera
           className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
           style={{ transform: "translateY(-8%)" }}
         >
-          <div
-            className={`relative w-[80vw] max-w-[340px] aspect-[3/4] rounded-[24px] border-2 border-dashed border-white/60 scan-focus-mask ${
-              scanSuccess ? "scan-focus-mask-success" : ""
-            }`}
-          >
-            {/* Scanning laser line */}
-            {!scanSuccess && <div className="absolute top-0 left-0 w-full h-[2px] scan-line animate-scan" />}
+          <div className="relative flex flex-col items-center gap-4">
+            {/* 扫描框 */}
+            <div
+              className={`relative w-[80vw] max-w-[340px] aspect-[3/4] rounded-[24px] border-2 border-dashed border-white/60 scan-focus-mask ${
+                scanSuccess ? "scan-focus-mask-success" : ""
+              }`}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Bottom controls - shutter button + crystal glass hint (Style A) */}
+      {!readingMode && (
+        <div
+          className="absolute bottom-0 left-0 w-full z-20 flex items-end justify-center pointer-events-none"
+          style={{ paddingBottom: "calc(env(safe-area-inset-bottom, 16px) + 20px)" }}
+        >
+          <div className="flex flex-col items-center gap-3 pointer-events-auto">
+            {/* 贴纸风提示胶囊（button.html Style B: capsule-paper） */}
+            <div className="relative animate-float-slow">
+              <div
+                className="flex items-center gap-2 pl-2 pr-5 py-1.5"
+                style={{
+                  background: "#ffffff",
+                  borderRadius: "40px",
+                  boxShadow: "0 4px 15px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.1)",
+                  color: "var(--text-dark)",
+                }}
+              >
+                <div className="w-[38px] h-[38px] rounded-full flex items-center justify-center text-[1.6rem]"
+                  style={{ background: "#FFF8E1" }}
+                >
+                  🦊
+                </div>
+                <div className="text-[0.9rem] font-fredoka font-extrabold">
+                  拍拍书的封面试试！
+                </div>
+              </div>
+              {/* 小尾巴 */}
+              <div
+                className="absolute left-1/2 -bottom-1"
+                style={{
+                  width: 0,
+                  height: 0,
+                  borderLeft: "7px solid transparent",
+                  borderRight: "7px solid transparent",
+                  borderTop: "7px solid #ffffff",
+                  transform: "translateX(-50%)",
+                  filter: "drop-shadow(0 2px 1px rgba(0,0,0,0.05))",
+                }}
+              />
+            </div>
+
+            {/* 快门按钮：还原 button4.html 的 .shutter-btn 样式 */}
+            <button
+              type="button"
+              onClick={handleShutterClick}
+              className="camera-shutter active:scale-95 transition-transform duration-100"
+              aria-label="拍照识别封面"
+            />
           </div>
         </div>
       )}
@@ -205,22 +245,6 @@ export function CameraScreen({ isActive, onBack, onRead, onScanSuccess }: Camera
             添加新书
           </div>
           <div style={{ width: 40 }} />
-        </div>
-      )}
-
-      {/* 狐狸引导气泡 */}
-      {!readingMode && (
-        <div
-          className={`absolute bottom-[110px] right-0 z-30 flex flex-col items-end transition-transform duration-500 ease-out ${
-            showFoxGuide ? "translate-x-0" : "translate-x-full"
-          }`}
-        >
-          <div className="bg-white px-3.5 py-2.5 rounded-[20px_20px_0_20px] shadow-[0_5px_15px_rgba(0,0,0,0.25)] mr-5 mb-[-8px] text-[0.8rem] font-bold text-[color:var(--text-dark)] max-w-[220px]">
-            {guideText}
-          </div>
-          <div className="text-[3.2rem] drop-shadow-[-5px_6px_12px_rgba(0,0,0,0.35)] mr-2">
-            🦊
-          </div>
         </div>
       )}
 

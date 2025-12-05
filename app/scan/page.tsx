@@ -41,6 +41,14 @@ export default function ScanPage() {
     setGuideText("把封面放进框框里哦~")
   }
 
+  const handleShutterClick = () => {
+    if (scanSuccess || error) return
+    setIsScanning(false)
+    setScanSuccess(true)
+    setGuideText("找到啦！")
+    // 保持原有自动跳转计时，不额外 push 路由，避免重复跳转
+  }
+
   return (
     <div className="min-h-screen bg-black flex flex-col">
       {/* Header */}
@@ -133,9 +141,31 @@ export default function ScanPage() {
         )}
       </div>
 
-      <div className="p-6 bg-gradient-to-t from-black/80 to-transparent text-center space-y-2">
-        <p className="text-white font-medium text-balance">将绘本封面对准取景框</p>
-        <p className="text-white/60 text-sm">系统将自动识别并开始阅读</p>
+      {/* 底部控制台：快门按钮 + 文案 */}
+      <div className="pb-8 pt-4 px-6 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col items-center gap-4">
+        {/* 快门按钮 */}
+        <button
+          type="button"
+          onClick={handleShutterClick}
+          className="relative w-20 h-20 flex items-center justify-center active:scale-95 transition-transform duration-100"
+        >
+          {/* 外圈 */}
+          <div className="absolute inset-0 rounded-full border-4 border-white/90 shadow-[0_5px_15px_rgba(0,0,0,0.4)]" />
+          {/* 内芯 */}
+          <div
+            className="w-16 h-16 rounded-full border-[3px] border-white shadow-inner"
+            style={{
+              background: "radial-gradient(circle at 30% 30%, #FFD740 0%, #FFC107 100%)",
+              boxShadow: "inset 0 -4px 4px rgba(0,0,0,0.15)",
+            }}
+          />
+        </button>
+
+        {/* 提示文案 */}
+        <div className="text-center space-y-1">
+          <p className="text-white font-medium text-balance">将绘本封面对准取景框</p>
+          <p className="text-white/60 text-sm">点击下方按钮拍照识别，系统将自动开始阅读</p>
+        </div>
       </div>
     </div>
   )

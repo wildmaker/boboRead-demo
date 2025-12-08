@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { HomeScreen, type Book } from "@/components/home-screen"
 import { CameraScreen } from "@/components/camera-screen"
 import { OnboardingGuide } from "@/components/onboarding-guide"
@@ -8,6 +9,7 @@ import { FtuxIntro } from "@/components/ftux-intro"
 import { BookDetailModal, type CardRect } from "@/components/book-detail-modal"
 
 export default function Page() {
+  const router = useRouter()
   const [activeScreen, setActiveScreen] = useState<"home" | "camera">("home")
   const [bookCount, setBookCount] = useState<1 | 7>(1)
   const [showOnboarding, setShowOnboarding] = useState(false)
@@ -36,6 +38,10 @@ export default function Page() {
     setActiveScreen("camera")
   }
 
+  const startReadingBook = (book: Book) => {
+    router.push(`/read/${book.id}`)
+  }
+
   const handleOnboardingComplete = () => {
     setShowOnboarding(false)
     
@@ -45,7 +51,7 @@ export default function Page() {
       // 关闭图书详情弹窗
       setShowBookDetail(false)
       console.log("开始阅读:", pendingReadingBook.title)
-      // TODO: 实现开始阅读逻辑（例如跳转到阅读页面）
+      startReadingBook(pendingReadingBook)
       setPendingReadingBook(null)
     } else {
       // 通过"添加新书"触发的引导：完成引导后进入摄像头界面
@@ -126,16 +132,17 @@ export default function Page() {
           setPendingReadingBook(book)
           setOnboardingSource("startReading")
           setShowOnboarding(true)
-        } else {
-          // 已看过引导或已开始阅读过：直接开始阅读
-          console.log("开始阅读:", book.title)
-          // TODO: 实现开始阅读逻辑（例如跳转到阅读页面）
+          return
         }
       }
     } catch {
       // 忽略本地存储异常
       console.log("开始阅读:", book.title)
     }
+
+    // 已看过引导或已开始阅读过：直接开始阅读
+    console.log("开始阅读:", book.title)
+    startReadingBook(book)
   }
 
   return (

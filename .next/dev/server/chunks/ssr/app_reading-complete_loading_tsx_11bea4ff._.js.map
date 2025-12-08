@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/wildmaker/Documents/Projects/boboRead-demo/app/reading-complete/loading.tsx"],"sourcesContent":["export default function Loading() {\n  return (\n    <div className=\"min-h-screen bg-gradient-to-br from-primary/10 via-background to-secondary/10 flex items-center justify-center\">\n      <div className=\"animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent\" />\n    </div>\n  )\n}\n\n\n"],"names":[],"mappings":";;;;;;AAAe,SAAS;IACtB,qBACE,+YAAC;QAAI,WAAU;kBACb,cAAA,+YAAC;YAAI,WAAU;;;;;;;;;;;AAGrB"}}]
+}

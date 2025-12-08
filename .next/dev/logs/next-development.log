@@ -1,67 +1,86 @@
-[00:00:01.135] Server  WARN     ⚠ Minimum recommended TypeScript version is v5.1.0, older versions can potentially be incompatible with Next.js. Detected: 5.0.2
-[00:00:01.269] Server  LOG      ✓ Ready in 962ms
-[00:35:15.550] Server  WARN     ⚠ Cross origin request detected from 192.168.0.99 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+[00:00:01.244] Server  WARN     ⚠ Minimum recommended TypeScript version is v5.1.0, older versions can potentially be incompatible with Next.js. Detected: 5.0.2
+[00:00:01.389] Server  LOG      ✓ Ready in 1032ms
+[00:00:11.432] Server  ERROR    ⨯ ./app/page.tsx:1:2
+Parsing ecmascript source code failed
+> 1 | \"use client\"
+    |  ^^^^^^^^^^^^^
+  2 |
+  3 | import { useEffect, useState } from \"react\"
+  4 | import { useRouter } from \"next/navigation\"
+
+Unterminated string constant
+
+
+[00:00:11.438] Server  ERROR    ⨯ ./app/page.tsx:1:2
+Parsing ecmascript source code failed
+> 1 | \"use client\"
+    |  ^^^^^^^^^^^^^
+  2 |
+  3 | import { useEffect, useState } from \"react\"
+  4 | import { useRouter } from \"next/navigation\"
+
+Unterminated string constant
+
+
+[00:00:12.176] Server  WARN     ⚠ Cross origin request detected from 192.168.0.99 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
 Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
-[00:35:15.685] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:35:15.685] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:35:15.685] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764906190778}
-[00:42:03.827] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:42:03.827] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:42:03.827] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764906598923}
-[00:42:58.422] Server  LOG      ✓ Compiled in 288ms
-[00:54:33.014] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:54:33.014] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:54:33.014] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764907348207}
-[00:54:35.892] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:54:35.892] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:54:35.892] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764907350994}
-[00:57:41.743] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[00:57:41.743] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[00:57:41.743] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764907536849}
-[01:09:31.719] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:09:31.719] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:09:31.719] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764908246830}
-[01:12:33.315] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:12:33.315] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:12:33.315] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764908428429}
-[01:14:17.872] Server  LOG      ✓ Compiled in 202ms
-[01:15:17.730] Server  LOG      ✓ Compiled in 326ms
-[01:15:53.817] Server  LOG      ✓ Compiled in 231ms
-[01:16:00.044] Server  LOG      ✓ Compiled in 76ms
-[01:16:20.564] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:16:20.564] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:16:20.564] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764908655679}
-[01:17:15.802] Server  LOG      ✓ Compiled in 214ms
-[01:17:29.370] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:17:29.370] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:17:29.370] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764908724485}
-[01:17:43.508] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:17:43.508] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:17:43.508] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764908738624}
-[01:18:38.799] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:18:38.799] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:18:38.799] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764908793914}
-[01:20:23.707] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:20:23.707] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:20:23.707] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764908898823}
-[01:23:18.120] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:23:18.120] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:23:18.120] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764909073237}
-[01:24:34.262] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:24:34.262] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:24:34.262] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764909149378}
-[01:25:57.616] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:25:57.617] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:25:57.617] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764909232734}
-[01:26:15.737] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:26:15.737] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:26:15.737] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764909250854}
-[01:28:28.890] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:28:28.890] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:28:28.890] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764909384005}
-[01:42:54.519] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:42:54.520] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:42:54.520] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764910249644}
-[01:45:33.691] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
-[01:45:33.692] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
-[01:45:33.692] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1764910408818}
+[00:00:12.190] Browser ERROR   uncaughtError: Error: ./app/page.tsx:1:2
+Parsing ecmascript source code failed
+> 1 | \"use client\"
+    |  ^^^^^^^^^^^^^
+  2 |
+  3 | import { useEffect, useState } from \"react\"
+  4 | import { useRouter } from \"next/navigation\"
+
+Unterminated string constant
+
+
+[00:00:12.378] Browser ERROR   ./app/page.tsx:1:2
+Parsing ecmascript source code failed
+> 1 | \"use client\"
+    |  ^^^^^^^^^^^^^
+  2 |
+  3 | import { useEffect, useState } from \"react\"
+  4 | import { useRouter } from \"next/navigation\"
+
+Unterminated string constant
+[00:00:13.390] Browser ERROR   ./app/page.tsx:1:2
+Parsing ecmascript source code failed
+> 1 | \"use client\"
+    |  ^^^^^^^^^^^^^
+  2 |
+  3 | import { useEffect, useState } from \"react\"
+  4 | import { useRouter } from \"next/navigation\"
+
+Unterminated string constant
+[00:01:04.154] Server  LOG      ✓ Compiled in 170ms
+[00:01:06.236] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:01:06.236] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:01:06.236] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1765177740867}
+[00:04:52.457] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[00:04:52.457] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/","route":"/"}
+[00:04:52.457] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1765177967084}
+[00:05:01.411] Browser LOG     开始阅读: 法老王的宝藏
+[00:05:02.586] Browser ERROR   A param property was accessed directly with `params.id`. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:02.586] Browser ERROR   A param property was accessed directly with `params.id`. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:02.586] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/read/1 color: rgb(120, 120, 120) color: inherit {"dp":"/read/[id]","o":"http://192.168.0.99:3000/read/1","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1765177977218}
+[00:05:05.255] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/reading-complete?bookId=undefined color: rgb(120, 120, 120) color: inherit {"dp":"/reading-complete","o":"http://192.168.0.99:3000/reading-complete?bookId=undefined","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1765177979886}
+[00:05:10.586] Browser ERROR   A param property was accessed directly with `params.id`. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:10.590] Browser ERROR   A param property was accessed directly with `params.id`. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:10.590] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/read/1 color: rgb(120, 120, 120) color: inherit {"dp":"/read/[id]","o":"http://192.168.0.99:3000/read/1","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1765177985207}
+[00:05:11.841] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/reading-complete?bookId=undefined color: rgb(120, 120, 120) color: inherit {"dp":"/reading-complete","o":"http://192.168.0.99:3000/reading-complete?bookId=undefined","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1765177986458}
+[00:05:14.463] Browser ERROR   A param property was accessed directly with `params.id`. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:14.463] Browser ERROR   A param property was accessed directly with `params.id`. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:14.463] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/read/1 color: rgb(120, 120, 120) color: inherit {"dp":"/read/[id]","o":"http://192.168.0.99:3000/read/1","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1765177989029}
+[00:05:16.557] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/book/undefined color: rgb(120, 120, 120) color: inherit {"dp":"/book/[id]","o":"http://192.168.0.99:3000/book/undefined","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1765177991035}
+[00:05:16.557] Browser ERROR   A param property was accessed directly with `params.id`. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:16.557] Browser ERROR   A param property was accessed directly with `params.id`. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:19.893] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/scan?bookId=1 color: rgb(120, 120, 120) color: inherit {"dp":"/scan","o":"http://192.168.0.99:3000/scan?bookId=1","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1765177994525}
+[00:05:20.232] Browser WARN    Image with src "http://192.168.0.99:3000/images/fox_01.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:05:23.897] Browser ERROR   A param property was accessed directly with `params.id`. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:23.897] Browser ERROR   A param property was accessed directly with `params.id`. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:23.897] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/read/1 color: rgb(120, 120, 120) color: inherit {"dp":"/read/[id]","o":"http://192.168.0.99:3000/read/1","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1765177998437}
+[00:05:26.159] Browser ERROR   A param property was accessed directly with `params.id`. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:26.159] Browser ERROR   A param property was accessed directly with `params.id`. `params` is a Promise and must be unwrapped with `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis
+[00:05:26.159] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/book/undefined color: rgb(120, 120, 120) color: inherit {"dp":"/book/[id]","o":"http://192.168.0.99:3000/book/undefined","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1765178000790}
+[00:05:27.415] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://192.168.0.99:3000/ color: rgb(120, 120, 120) color: inherit {"dp":"/","o":"http://192.168.0.99:3000/","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1765178002047}

@@ -27,17 +27,6 @@ const mockBooks: Record<
     pages: number
   }
 > = {
-  "1": {
-    id: "1",
-    title: "小兔子的冒险",
-    author: "张晓明",
-    description:
-      "跟随小兔子一起探索神奇的森林世界，学习勇敢和友谊的重要性。这是一个温馨的故事，适合睡前阅读。",
-    cover: "/cute-rabbit-adventure.jpg",
-    ageRange: "3-5岁",
-    resourceType: "free",
-    pages: 24,
-  },
   "2": {
     id: "2",
     title: "恐龙世界大探险",
@@ -64,7 +53,7 @@ export default function BookDetailPage({ params }: { params: { id: string } }) {
   const router = useRouter()
   const [showPaywall, setShowPaywall] = useState(false)
 
-  const book = mockBooks[params.id] || mockBooks["1"]
+  const book = mockBooks[params.id] || mockBooks["2"]
 
   const hasPermission = () => {
     if (book.resourceType === "free") return true

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>玻璃态对比度方案 Demo</title>
+  <style>
+    :root {
+      --text-white: rgba(255, 255, 255, 0.95);
+      --text-dim: rgba(255, 255, 255, 0.7);
+      --active-orange: #ff9f43;
+    }
+
+    * { box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      margin: 0; padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      transition: background 0.5s ease;
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+    }
+
+    /* 背景切换控制栏 */
+    .bg-switcher {
+      position: fixed; top: 20px; z-index: 100;
+      display: flex; gap: 8px;
+      background: rgba(0,0,0,0.6); padding: 8px; border-radius: 99px;
+      backdrop-filter: blur(10px);
+    }
+    .bg-btn {
+      padding: 6px 14px; border: none; border-radius: 20px;
+      background: rgba(255,255,255,0.1); color: #fff; font-size: 12px; cursor: pointer;
+    }
+    .bg-btn:hover { background: rgba(255,255,255,0.3); }
+
+    /* 方案容器 */
+    .showcase {
+      margin-top: 100px;
+      width: 90%; max-width: 400px;
+      display: flex; flex-direction: column; gap: 40px;
+      padding-bottom: 50px;
+    }
+
+    .scheme-title {
+      font-size: 12px; opacity: 0.8; margin-bottom: 10px;
+      text-transform: uppercase; letter-spacing: 1px;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
+
+    /* 模拟底部栏布局 */
+    .control-bar {
+      display: flex; gap: 12px; height: 68px; align-items: center;
+    }
+    
+    .capsule {
+      flex: 1; height: 100%; border-radius: 999px;
+      display: flex; align-items: center; padding: 0 8px 0 20px;
+      justify-content: space-between;
+      transition: all 0.3s;
+    }
+    .mic {
+      width: 68px; height: 68px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s;
+    }
+
+    .text-group { display: flex; flex-direction: column; }
+    .t-main { font-size: 15px; font-weight: 600; color: var(--text-white); }
+    .t-sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+    
+    .icon-circle {
+      width: 52px; height: 52px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    svg { width: 24px; fill: #fff; }
+
+    /* =========================================
+       方案 A: 深邃磨砂 (Deep Frost)
+       特点：深色底 + 适度模糊。
+       优势：即使背景是纯白色，也能保证白色文字清晰可见。
+       ========================================= */
+    .scheme-a .glass-style {
+      /* 关键：使用较高不透明度的黑色，确保对比度 */
+      background: rgba(16, 20, 35, 0.75);
+      
+      /* 适度模糊，处理背景杂色 */
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      
+      /* 细微的边框，不是为了发光，而是为了界限 */
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      
+      /* 柔和阴影 */
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+    
+    .scheme-a .icon-circle { background: rgba(255,255,255,0.1); }
+
+    /* =========================================
+       方案 B: 均质釉面 (Luminous Glaze)
+       特点：极高模糊 + 饱和度 + 渐变光泽。
+       优势：非常有高级感，利用模糊将背景色块化，防止文字与背景细节重叠。
+       ========================================= */
+    .scheme-b .glass-style {
+      /* 关键：底色较淡，依靠模糊来平滑背景 */
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+      
+      /* 关键：极高模糊 + 饱和度提升(让背景色彩鲜艳但模糊) */
+      backdrop-filter: blur(40px) saturate(180%);
+      -webkit-backdrop-filter: blur(40px) saturate(180%);
+      
+      /* 混合模式边框，模拟玻璃边缘反光 */
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-top-color: rgba(255,255,255,0.4);
+      border-bottom-color: rgba(255,255,255,0.1);
+      
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    /* 为了保证浅色背景下的可见度，给文字加一点点阴影保护 */
+    .scheme-b .t-main, .scheme-b .t-sub {
+      text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+    .scheme-b .icon-circle { background: rgba(0,0,0,0.2); }
+
+    /* =========================================
+       方案 C: 结构光影 (Double Border)
+       特点：低透明度 + 强轮廓 + 深阴影。
+       优势：通过强化的物理层级（边缘光和投影）把按钮“托”起来，适合复杂纹理背景。
+       ========================================= */
+    .scheme-c .glass-style {
+      /* 较深的半透明底色 */
+      background: rgba(0, 0, 0, 0.45);
+      
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      
+      /* 关键：双重投影（内发光+外阴影） */
+      box-shadow: 
+        0 15px 35px rgba(0,0,0,0.6),             /* 强烈的外部投影，使按钮悬浮 */
+        inset 0 1px 1px rgba(255,255,255,0.3);    /* 顶部边缘高光 */
+
+      /* 明显的边框 */
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .scheme-c .icon-circle { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.1); }
+
+  </style>
+</head>
+<body id="demoBody">
+
+  <!-- 背景切换器 -->
+  <div class="bg-switcher">
+    <button class="bg-btn" onclick="setBg('dark')">暗夜 (Dark)</button>
+    <button class="bg-btn" onclick="setBg('light')">亮白 (Light)</button>
+    <button class="bg-btn" onclick="setBg('busy')">复杂 (Busy)</button>
+  </div>
+
+  <div class="showcase">
+    
+    <!-- 方案 A -->
+    <div>
+      <div class="scheme-title">方案 A: Deep Frost (深色稳重 / 最佳阅读性)</div>
+      <div class="scheme-a control-bar">
+        <div class="capsule glass-style">
+          <div class="text-group">
+            <span class="t-main">AI 伴读中</span>
+            <span class="t-sub">点击暂停</span>
+          </div>
+          <div class="icon-circle">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <div class="mic glass-style">
+          <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- 方案 B -->
+    <div>
+      <div class="scheme-title">方案 B: Luminous Glaze (极度模糊 / 通透高级)</div>
+      <div class="scheme-b control-bar">
+        <div class="capsule glass-style">
+          <div class="text-group">
+            <span class="t-main">AI 伴读中</span>
+            <span class="t-sub">点击暂停</span>
+          </div>
+          <div class="icon-circle">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <div class="mic glass-style">
+          <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- 方案 C -->
+    <div>
+      <div class="scheme-title">方案 C: Double Border (强轮廓 / 物理立体感)</div>
+      <div class="scheme-c control-bar">
+        <div class="capsule glass-style">
+          <div class="text-group">
+            <span class="t-main">AI 伴读中</span>
+            <span class="t-sub">点击暂停</span>
+          </div>
+          <div class="icon-circle">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+        </div>
+        <div class="mic glass-style">
+          <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const body = document.getElementById('demoBody');
+    // 背景图片资源
+    const bgs = {
+      // 暗色背景：本地 brave-rabbit-book.jpg 图片
+      dark: 'url("brave-rabbit-book.jpg")',
+      // 亮色背景：本地 brave-rabbit-book.jpg 图片
+      light: 'url("brave-rabbit-book.jpg")',
+      // 杂乱背景：本地 brave-rabbit-book.jpg 图片
+      busy: 'url("brave-rabbit-book.jpg")'
+    };
+
+    // 初始化背景
+    setBg('dark');
+
+    function setBg(type) {
+      body.style.backgroundImage = bgs[type];
+    }
+  </script>
+</body>
+</html>

@@ -45,6 +45,14 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Drawer variables from HTML demo */
+  --drawer-bg-body: #F2F2F7;
+  --drawer-bg-drawer: #FFFFFF;
+  --drawer-text-primary: #1D1D1F;
+  --drawer-card-bg: #FFFFFF;
+  --drawer-shadow-diffuse: 0 8px 20px rgba(0,0,0,0.06);
+  --drawer-shadow-active: 0 20px 50px rgba(0,0,0,0.12);
 }
 
 /* Added dark mode styles */
@@ -825,4 +833,1117 @@
 .ftux-btn:active {
   transform: translateY(4px);
   box-shadow: 0 2px 0 #ff8f00;
+}
+
+/* ===================== StoryPal Read Page (Camera + Fox Bubble) ===================== */
+
+.storypal-read-root {
+  --glass-bg: rgba(8, 13, 35, 0.45);
+  --glass-border: rgba(255, 255, 255, 0.25);
+  --glass-active: rgba(255, 255, 255, 0.15);
+  --shadow-strong: 0 18px 45px rgba(0, 0, 0, 0.65);
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --text-color: #f9fbff;
+  --active-color: #ffd166;
+  --accent-read: #ffd166;
+  --accent-chat: #4cc9f0;
+  --active-glow: rgba(255, 160, 60, 0.5);
+  --active-border: rgba(255, 180, 100, 0.6);
+  --capsule-height: 56px;
+  --glass-capsule-surface: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(9, 13, 28, 0.92));
+  --glass-mic-surface: linear-gradient(135deg, rgba(255, 184, 104, 0.45), rgba(11, 15, 32, 0.95));
+  --glass-border-top-strong: rgba(255, 255, 255, 0.55);
+  --glass-border-bottom-strong: rgba(2, 4, 12, 0.7);
+  --glass-highlight: rgba(255, 255, 255, 0.25);
+  --glass-noise: rgba(255, 255, 255, 0.1);
+  --glass-blur-medium: 24px;
+  --glass-blur-strong: 40px;
+  --glass-glow-strong: 0 20px 48px rgba(0, 0, 0, 0.6);
+  --glass-glow-mic: 0 18px 46px rgba(255, 158, 80, 0.35);
+  color: var(--text-color);
+}
+
+.camera-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+#camera {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+  background: #000;
+}
+
+.camera-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1.2);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background: #000;
+}
+
+.camera-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  background: radial-gradient(circle at top, #1f264e 0, #050717 50%, #000 100%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.camera-wrapper.no-camera .camera-fallback {
+  opacity: 1;
+}
+
+.camera-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 0 34px;
+  z-index: 2;
+}
+
+.glass-header {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: calc(env(safe-area-inset-top, 0px) + 8px) 16px 8px;
+  min-height: calc(var(--capsule-height) + env(safe-area-inset-top, 0px));
+  border-radius: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(4, 11, 31, 0.38));
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: none;
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft);
+}
+
+.scene-capsule-floating {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.scene-top-controls {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.scene-top-controls > * {
+  pointer-events: auto;
+}
+
+.scene-top-controls .scene-capsule {
+  justify-self: center;
+}
+
+.glass-icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(4, 11, 31, 0.38));
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glass-icon-btn svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.camera-switch-btn {
+  font-size: 0;
+}
+
+.camera-switch-icon {
+  font-size: 18px;
+  font-family: "Helvetica Neue", "Segoe UI", sans-serif;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: inherit;
+  transition: transform 0.35s ease;
+}
+
+.glass-icon-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+
+.scene-capsule-row {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.glass-header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.scene-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--glass-border);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(4, 11, 31, 0.38));
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.scene-capsule:active {
+  transform: translateY(1px) scale(0.99);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.scene-icon {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px;
+}
+
+.scene-icon span {
+  width: 7px;
+  height: 7px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.scene-text {
+  white-space: nowrap;
+}
+
+.glass-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.close-btn {
+  /* 继承 glass-icon-btn 的样式，只覆盖必要的属性 */
+  font-size: 18px;
+  font-family: "Helvetica Neue", "Segoe UI", sans-serif;
+  line-height: 1;
+  color: #fff;
+}
+
+.header-title {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.glass-footer {
+  pointer-events: none;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 0 24px;
+}
+
+/* 底部控制条容器（参考 demo HTML） */
+.mode-row {
+  pointer-events: auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-wrapper {
+  position: relative;
+  max-width: 400px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.glass-btn {
+  --glass-surface: var(--glass-capsule-surface, linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(9, 13, 28, 0.9)));
+  --glass-blur-current: var(--glass-blur-medium, 24px);
+  --glass-shadow-current: var(--glass-glow-strong, 0 20px 48px rgba(0, 0, 0, 0.6));
+  position: relative;
+  background: var(--glass-surface);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top-color: var(--glass-border-top-strong, rgba(255, 255, 255, 0.55));
+  border-bottom-color: var(--glass-border-bottom-strong, rgba(2, 4, 12, 0.7));
+  backdrop-filter: blur(var(--glass-blur-current)) saturate(185%) brightness(1.05);
+  -webkit-backdrop-filter: blur(var(--glass-blur-current)) saturate(185%) brightness(1.05);
+  box-shadow: var(--glass-shadow-current);
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.35s ease;
+}
+
+.glass-btn::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(130deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.12) 35%, rgba(255, 255, 255, 0) 70%);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.glass-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 15% 25%, rgba(255, 255, 255, 0.35), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(255, 255, 255, 0.18), transparent 55%);
+  opacity: 0.45;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.glass-btn > * {
+  position: relative;
+  z-index: 1;
+}
+
+.glass-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--glass-shadow-current), 0 25px 55px rgba(0, 0, 0, 0.65);
+}
+
+.glass-btn:active {
+  transform: scale(0.98);
+  box-shadow: var(--glass-shadow-current);
+}
+
+.capsule-main {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px 0 12px;
+  gap: 10px;
+}
+
+.fox-bubble-container {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px;
+  width: auto;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.fox-bubble-container:active {
+  transform: scale(0.98);
+}
+
+.fox-avatar {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  transition: border-color 0.25s ease;
+}
+
+.fox-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.fox-bubble {
+  display: none; /* 声音波浪已直接集成到胶囊中，隐藏原气泡背景 */
+}
+
+.fox-text-content {
+  flex: 0;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.bubble-status {
+  font-size: 10px;
+  color: var(--active-color);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+
+.bubble-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.95);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.bubble-icon-area {
+  flex: 1;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-right: 12px;
+  min-width: 0;
+}
+
+.wave-container {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 62px; /* Shift left 8px while keeping avatar space */
+  padding-right: 16px; /* Balance the padding */
+  pointer-events: none;
+  gap: 6px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 15%, #000 85%, transparent 100%);
+}
+
+.play-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.play-toggle svg {
+  width: 20px;
+  height: 20px;
+  fill: #fff;
+}
+
+.play-toggle:active {
+  transform: scale(0.95);
+}
+
+.control-wrapper[data-state="paused"] .play-toggle {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.wave-bar {
+  width: 4px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 5px rgba(255,255,255,0.3);
+  animation: bar-bounce-mini 1s infinite ease-in-out;
+  flex-shrink: 0;
+  transition: height 0.08s ease, background-color 0.08s ease, box-shadow 0.08s ease, transform 0.08s ease, opacity 0.08s ease;
+}
+
+.wave-bar:nth-child(1) { animation-delay: 0s; }
+.wave-bar:nth-child(2) { animation-delay: 0.3s; }
+.wave-bar:nth-child(3) { animation-delay: 0.1s; }
+.wave-bar:nth-child(4) { animation-delay: 0.4s; }
+.wave-bar:nth-child(5) { animation-delay: 0.2s; }
+.wave-bar:nth-child(6) { animation-delay: 0s; }
+.wave-bar:nth-child(7) { animation-delay: 0.3s; }
+.wave-bar:nth-child(8) { animation-delay: 0.1s; }
+.wave-bar:nth-child(9) { animation-delay: 0.4s; }
+.wave-bar:nth-child(10) { animation-delay: 0.2s; }
+
+@keyframes storypal-wave {
+  0%,
+  100% {
+    transform: scaleY(0.5);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+.icon-symbol {
+  display: none;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Update paused logic to target the moved wave-container */
+.control-wrapper[data-state="paused"] .wave-bar {
+  animation-play-state: paused; /* 保持帧位置，恢复时不重新启动动画时间线 */
+  transform: scaleY(0.35);
+  opacity: 0.45;
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: none;
+}
+
+.fox-bubble-container.paused .icon-play {
+  display: none;
+}
+
+
+.fox-bubble-container.paused .bubble-status {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-capsule[data-bubble-state="finished"] .wave-container {
+  display: none;
+}
+
+.mode-switch-wrapper {
+  pointer-events: auto;
+  width: 100%;
+  height: 54px;
+  padding: 4px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(4, 11, 31, 0.38));
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  position: relative;
+}
+
+.mode-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  z-index: 2;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mode-option.active {
+  color: #fff;
+  font-weight: 600;
+}
+
+.mode-slider {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.mode-switch-wrapper[data-mode="chat"] .mode-slider {
+  transform: translateX(100%);
+}
+
+/* =========================================
+   底部控制条容器 (Demo 样式)
+   ========================================= */
+.control-wrapper {
+  position: relative;
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 400px;
+  height: 68px;
+}
+
+/* =========================================
+   1. 左侧胶囊 (AI 伴读 / 播放控制)
+   ========================================= */
+.btn-capsule {
+  flex: 1;
+  height: 100%;
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15); /* Increased opacity */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 1px 1px rgba(255,255,255,0.4);
+  cursor: pointer;
+  padding: 0;
+  display: block;
+}
+
+.text-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: color 0.3s;
+  color: var(--text-main);
+}
+
+.sub {
+  font-size: 11px;
+  color: var(--text-sub);
+  margin-top: 2px;
+  font-weight: 400;
+  transition: color 0.3s;
+}
+
+.icon-area {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  /* Scheme C light icon circle for contrast against dark glass */
+  background: rgba(255, 255, 255, 0.15);
+  /* Scheme C border */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.icon-area svg {
+  width: 20px;
+  height: 20px;
+  fill: #fff;
+}
+
+/* =========================================
+   2. 右侧麦克风按钮
+   ========================================= */
+.btn-mic {
+  /* Scheme C: Double Border (Optimized) */
+  --glass-surface: rgba(0, 0, 0, 0.75);
+  --glass-blur-current: 12px;
+  --glass-shadow-current: 0 15px 35px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.3);
+  --glass-border-top-strong: rgba(255, 255, 255, 0.15);
+  --glass-border-bottom-strong: rgba(255, 255, 255, 0.15);
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-top-color: var(--glass-border-top-strong, rgba(255, 255, 255, 0.55));
+  border-bottom-color: var(--glass-border-bottom-strong);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Remove glass-btn overlays to match Scheme B clean style */
+.btn-capsule::before,
+.btn-capsule::after,
+.btn-mic::before,
+.btn-mic::after {
+  display: none;
+}
+
+.btn-mic svg {
+  width: 26px;
+  height: 26px;
+  fill: #fff;
+  transition: transform 0.3s;
+}
+
+/* 声波气泡（位于麦克风上方） */
+.wave-bubble {
+  position: absolute;
+  right: 0;
+  bottom: 80px;
+  width: 68px;
+  height: 44px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.8);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.wave-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  margin-left: -6px;
+  width: 12px;
+  height: 12px;
+  background: inherit;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+
+/* 声波条 */
+.bar {
+  width: 4px;
+  background: #ffaa55;
+  border-radius: 4px;
+  animation: sound-wave 0.8s infinite ease-in-out;
+}
+
+.bar:nth-child(1) {
+  height: 10px;
+  animation-delay: 0s;
+}
+.bar:nth-child(2) {
+  height: 20px;
+  animation-delay: 0.1s;
+}
+.bar:nth-child(3) {
+  height: 14px;
+  animation-delay: 0.2s;
+}
+.bar:nth-child(4) {
+  height: 18px;
+  animation-delay: 0.3s;
+}
+
+@keyframes sound-wave {
+  0%,
+  100% {
+    transform: scaleY(0.5);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+}
+
+/* =========================================
+   交互状态逻辑 (State Classes)
+   ========================================= */
+
+/* --- 状态 A: 朗读中 (Reading) --- */
+.control-wrapper[data-state="reading"] .btn-capsule {
+  /* background: var(--active-glow); */
+  /* border-color: var(--active-border); */
+  /* box-shadow: 0 0 25px rgba(255, 140, 40, 0.25); */
+}
+
+.control-wrapper[data-state="reading"] .sub {
+  color: #fff;
+  opacity: 0.9;
+}
+
+/* --- 状态 B: 暂停/空闲 (Paused) --- */
+.control-wrapper[data-state="paused"] .btn-capsule {
+  opacity: 0.9;
+}
+
+.control-wrapper[data-state="paused"] .icon-area {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.control-wrapper[data-state="paused"] .aurora-nebula {
+  opacity: 0.25;
+  filter: blur(40px) grayscale(0.4);
+  animation-play-state: paused;
+}
+
+.control-wrapper[data-state="paused"] .nebula-blob {
+  animation-play-state: paused;
+}
+
+.control-wrapper[data-state="paused"] .fox-avatar {
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+/* 胶囊过渡速度（更快的交互反馈） */
+.btn-capsule {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* --- 状态 C: 正在聆听/按住Mic (Listening) --- */
+
+/* 1. Mic 按钮高亮 */
+.control-wrapper.is-listening .btn-mic {
+  background: var(--active-glow);
+  border-color: var(--active-border);
+  box-shadow: 0 0 30px rgba(255, 160, 60, 0.4);
+  transform: scale(1.1);
+}
+
+.control-wrapper.is-listening .btn-mic svg {
+  transform: scale(1.1);
+}
+
+/* 2. 气泡浮现 */
+.control-wrapper.is-listening .wave-bubble {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* 3. 胶囊变暗 (视觉上退后) */
+.control-wrapper.is-listening .btn-capsule {
+  opacity: 0.4;
+  filter: grayscale(1);
+  transform: scale(0.98);
+}
+
+/* =========================================
+   DRAWER 抽屉容器 (Arc Wheel Style)
+   ========================================= */
+
+.role-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  opacity: 1;
+  transition: opacity 0.3s;
+  pointer-events: auto;
+}
+
+.role-drawer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 400px;
+  background: var(--drawer-bg-drawer);
+  border-radius: 32px 32px 0 0;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slide-up-drawer 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+@keyframes slide-up-drawer {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.role-drawer-header {
+  padding: 24px 24px 10px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--drawer-text-primary);
+  position: relative;
+}
+
+.role-drawer-handle {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 5px;
+  background: #E5E5EA;
+  border-radius: 10px;
+}
+
+/* Wheel Container */
+.wheel-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 0 calc(50% - 90px); /* 50% - half card width (180/2) */
+  scrollbar-width: none;
+  touch-action: pan-x;
+  cursor: grab;
+}
+.wheel-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Card */
+.role-card-wheel {
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  width: 180px;
+  height: 220px;
+  margin: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
+  transition: opacity 0.2s;
+  cursor: pointer;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+  transform-origin: center center;
+}
+
+.role-card-inner {
+  width: 100%;
+  height: 100%;
+  background: var(--drawer-card-bg);
+  border-radius: 24px;
+  box-shadow: var(--drawer-shadow-diffuse);
+  border: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transform-origin: center center;
+  /* Optimized for smoother press/release without jitter */
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s, border-color 0.2s, background-color 0.2s;
+}
+
+.role-card-wheel.pressed .role-card-inner {
+  transform: scale(0.92);
+  /* Press down should be snappier */
+  transition: transform 0.1s ease-out;
+}
+
+.role-card-wheel.active {
+  z-index: 10;
+}
+
+.role-card-wheel.active .role-card-inner {
+  box-shadow: var(--drawer-shadow-active);
+}
+
+/* Selected State */
+.role-card-wheel.selected .role-card-inner {
+  border-color: #007AFF; /* iOS Blue or your theme color */
+  background-color: #F0F8FF;
+}
+
+.role-card-wheel.selected .role-card-inner::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid #007AFF;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+  z-index: 1;
+}
+
+.role-card-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #F2F2F7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44px;
+  margin-bottom: 20px;
+  pointer-events: none;
+}
+
+.role-card-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--drawer-text-primary);
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.role-card-wheel.active .role-card-name {
+  opacity: 1;
+}
+
+.role-card-wheel.selected .role-card-name {
+  color: #007AFF;
+  opacity: 1;
+}
+
+.drawer-close-btn-absolute {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: #f0f0f0;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+  z-index: 20;
+}
+
+/* =========================================
+   Option 1: Deep Nebula (深邃星云)
+   ========================================= */
+.aurora-nebula {
+  position: absolute;
+  inset: -50%;
+  z-index: 0;
+  filter: blur(30px);
+  opacity: 0.8;
+  animation: rotate-scene 20s infinite linear;
+  pointer-events: none;
+  /* Smooth transitions for state changes */
+  transition: opacity 0.45s ease, filter 0.45s ease;
+}
+
+.nebula-blob {
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: hard-light;
+  /* Smooth transition for state changes */
+  transition: transform 0.45s ease;
+}
+
+.nb-1 {
+  width: 200px;
+  height: 200px;
+  background: #7d5fff; /* 深紫 */
+  top: 20%;
+  left: 20%;
+  animation: move-nebula-1 8s infinite ease-in-out alternate;
+}
+
+.nb-2 {
+  width: 180px;
+  height: 180px;
+  background: #ff9f43; /* 亮橙 */
+  bottom: 20%;
+  right: 20%;
+  animation: move-nebula-2 10s infinite ease-in-out alternate;
+}
+
+.nb-3 {
+  width: 150px;
+  height: 150px;
+  background: #17c0eb; /* 青蓝 */
+  top: 40%;
+  right: 30%;
+  animation: pulse-nebula 6s infinite ease-in-out alternate;
+}
+
+@keyframes rotate-scene {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes move-nebula-1 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(60px, 40px); }
+}
+
+@keyframes move-nebula-2 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-50px, -30px); }
+}
+
+@keyframes pulse-nebula {
+  0% { opacity: 0.6; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes bar-bounce-mini {
+  0%, 100% { height: 6px; }
+  50% { height: 22px; }
 }

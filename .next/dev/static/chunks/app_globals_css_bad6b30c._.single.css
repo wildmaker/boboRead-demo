@@ -5922,7 +5922,7 @@
   border-radius: 99px;
   flex-shrink: 0;
   width: 4px;
-  transition: height 10ms, background-color .12s, box-shadow .12s, transform .12s, opacity .12s;
+  transition: height 80ms, background-color 80ms, box-shadow 80ms, transform 80ms, opacity 80ms;
   animation: 1s ease-in-out infinite bar-bounce-mini;
   box-shadow: 0 0 5px #ffffff4d;
 }
@@ -5985,13 +5985,12 @@
   display: none;
 }
 
-.control-wrapper[data-state="paused"] .wave-bar {
-  opacity: .5;
-  height: 4px;
-  box-shadow: none;
-  background: #ffffff4d;
-  animation: none;
-  transform: none;
+.control-wrapper[data-state="paused"] .wave-bar, .control-wrapper[data-state="finished"] .wave-bar {
+  opacity: .6;
+  background: #fff9;
+  animation-play-state: paused;
+  transform: scaleY(.35);
+  box-shadow: 0 0 6px #ffffff40;
 }
 
 .fox-bubble-container.paused .icon-play {
@@ -6003,7 +6002,7 @@
 }
 
 .btn-capsule[data-bubble-state="finished"] .wave-container {
-  display: none;
+  display: flex;
 }
 
 .mode-switch-wrapper {
@@ -6254,6 +6253,25 @@
 
 .control-wrapper[data-state="paused"] .fox-avatar {
   border: 2px solid #ffffff40;
+}
+
+.control-wrapper[data-state="finished"] .aurora-nebula {
+  opacity: .8;
+  filter: blur(30px);
+  animation-play-state: running;
+}
+
+.control-wrapper[data-state="finished"] .nebula-blob {
+  animation-play-state: running;
+}
+
+.control-wrapper[data-state="finished"] .btn-capsule {
+  opacity: 1;
+  filter: none;
+}
+
+.control-wrapper[data-state="finished"] .fox-avatar {
+  border: 2px solid #fff9;
 }
 
 .btn-capsule {

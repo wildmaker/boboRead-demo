@@ -1350,12 +1350,13 @@
 }
 
 /* Update paused logic to target the moved wave-container */
-.control-wrapper[data-state="paused"] .wave-bar {
+.control-wrapper[data-state="paused"] .wave-bar,
+.control-wrapper[data-state="finished"] .wave-bar {
   animation-play-state: paused; /* 保持帧位置，恢复时不重新启动动画时间线 */
   transform: scaleY(0.35);
-  opacity: 0.45;
-  background: rgba(255, 255, 255, 0.3);
-  box-shadow: none;
+  opacity: 0.6;
+  background: rgba(255, 255, 255, 0.6); /* 更高对比度 */
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.25);
 }
 
 .fox-bubble-container.paused .icon-play {
@@ -1368,7 +1369,7 @@
 }
 
 .btn-capsule[data-bubble-state="finished"] .wave-container {
-  display: none;
+  display: flex;
 }
 
 .mode-switch-wrapper {
@@ -1647,6 +1648,26 @@
 
 .control-wrapper[data-state="paused"] .fox-avatar {
   border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+/* --- 状态 D: 播放完成 (Finished) --- */
+.control-wrapper[data-state="finished"] .aurora-nebula {
+  opacity: 0.8;
+  filter: blur(30px);
+  animation-play-state: running;
+}
+
+.control-wrapper[data-state="finished"] .nebula-blob {
+  animation-play-state: running;
+}
+
+.control-wrapper[data-state="finished"] .btn-capsule {
+  opacity: 1;
+  filter: none;
+}
+
+.control-wrapper[data-state="finished"] .fox-avatar {
+  border: 2px solid rgba(255, 255, 255, 0.6);
 }
 
 /* 胶囊过渡速度（更快的交互反馈） */

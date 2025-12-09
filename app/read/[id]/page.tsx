@@ -432,9 +432,9 @@ export default function ReadPage() {
 
           {/* 底部控制条 */}
           <div className="glass-footer">
-            <div 
-              className={`control-wrapper ${chatState === "recording" ? "is-listening" : ""}`}
-              data-state={bubbleState === "playing" ? "reading" : "paused"}
+              <div 
+                className={`control-wrapper ${chatState === "recording" ? "is-listening" : ""}`}
+                data-state={bubbleState === "playing" ? "reading" : bubbleState === "finished" ? "finished" : "paused"}
             >
               {/* 声波气泡：按住麦克风时浮现 */}
               <div className="wave-bubble">

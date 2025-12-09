@@ -321,3 +321,23 @@ Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allow
 [05:10:05.838] Browser LOG     🎤 Mock: 模拟开始录音
 [05:10:06.839] Browser LOG     🎤 Mock: 录音数据: 1402 bytes
 [05:10:06.990] Browser LOG     🎤 Mock: 停止录音
+[05:14:41.131] Browser LOG     🎤 Mock: 模拟开始录音
+[05:14:42.070] Browser LOG     🎤 Mock: 停止录音
+[05:14:44.069] Browser LOG     🎤 Mock: 模拟开始录音
+[05:14:45.008] Browser LOG     🎤 Mock: 停止录音
+[05:14:50.199] Browser LOG     🎤 Mock: 模拟开始录音
+[05:14:50.832] Browser LOG     🎤 Mock: 停止录音
+[05:14:51.664] Browser LOG     🎤 Mock: 模拟开始录音
+[05:14:52.392] Browser LOG     🎤 Mock: 停止录音
+[05:30:04.382] Server  LOG      ✓ Compiled in 606ms
+[05:30:22.995] Server  LOG      ✓ Compiled in 202ms
+[05:30:43.362] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:30:43.506] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[05:30:43.506] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/read/1","route":"/read/[id]"}
+[05:30:43.506] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/read/1 color: rgb(120, 120, 120) color: inherit {"dp":"/read/[id]","o":"http://localhost:3000/read/1","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1765281396477}
+[05:34:28.595] Server  LOG      ✓ Compiled in 326ms
+[05:34:33.134] Server  LOG      ✓ Compiled in 250ms
+[05:35:33.556] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[05:35:33.675] Browser LOG     %c[Vercel Web Analytics]%c Debug mode is enabled by default in development. No requests will be sent to the server. color: rgb(120, 120, 120) color: inherit
+[05:35:33.675] Browser LOG     %c[Vercel Web Analytics]%c Running queued event color: rgb(120, 120, 120) color: inherit pageview {"path":"/read/1","route":"/read/[id]"}
+[05:35:33.675] Browser LOG     %c[Vercel Web Analytics]%c [pageview] http://localhost:3000/read/1 color: rgb(120, 120, 120) color: inherit {"dp":"/read/[id]","o":"http://localhost:3000/read/1","r":"","sdkn":"@vercel/analytics/next","sdkv":"1.6.0","sv":"0.1.3","ts":1765281686650}

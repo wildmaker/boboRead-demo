@@ -65,6 +65,7 @@
       --tw-backdrop-saturate: initial;
       --tw-backdrop-sepia: initial;
       --tw-duration: initial;
+      --tw-ease: initial;
       --tw-space-x-reverse: 0;
       --tw-animation-delay: 0s;
       --tw-animation-direction: normal;
@@ -151,6 +152,7 @@
     --radius-2xl: 1rem;
     --radius-3xl: 1.5rem;
     --drop-shadow-lg: 0 4px 4px #00000026;
+    --ease-in-out: cubic-bezier(.4, 0, .2, 1);
     --animate-spin: spin 1s linear infinite;
     --animate-pulse: pulse 2s cubic-bezier(.4, 0, .6, 1) infinite;
     --blur-sm: 8px;
@@ -3652,6 +3654,11 @@
     transition-duration: .4s;
   }
 
+  .ease-in-out {
+    --tw-ease: var(--ease-in-out);
+    transition-timing-function: var(--ease-in-out);
+  }
+
   .delay-300 {
     --tw-animation-delay: .3s;
     animation-delay: .3s;
@@ -5172,11 +5179,49 @@
   right: 24px;
 }
 
+.ftux-speaker-widget {
+  color: #4a3222;
+  z-index: 100;
+  background: #fff;
+  border-radius: 30px;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  animation: .6s cubic-bezier(.34, 1.56, .64, 1) ftux-speaker-fade-in;
+  display: inline-flex;
+  position: absolute;
+  top: 50px;
+  left: 24px;
+  box-shadow: 0 4px 15px #8b451314;
+}
+
+.ftux-speaker-widget .ftux-bar {
+  animation: 1s ease-in-out infinite ftux-wave;
+}
+
+@keyframes ftux-speaker-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px)scale(.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0)scale(1);
+  }
+}
+
+.ftux-root[data-ftux-step="2"] .ftux-skip-btn, .ftux-root[data-ftux-step="2"] .ftux-speaker-widget {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .ftux-carousel {
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   scrollbar-width: none;
   flex: 1;
+  min-height: 0;
   display: flex;
   overflow-x: auto;
 }
@@ -5187,70 +5232,91 @@
 
 .ftux-slide {
   scroll-snap-align: center;
+  background-color: var(--ftux-bg-color);
+  background-image: radial-gradient(var(--ftux-dot-color) 2px, transparent 2px);
+  background-size: 24px 24px;
   flex-direction: column;
   flex: 0 0 100%;
   align-items: center;
+  gap: clamp(24px, 4vh, 36px);
   width: 100%;
   height: 100%;
-  padding-top: 15vh;
+  padding: clamp(100px, 16vh, 140px) 20px clamp(40px, 6vh, 60px);
   display: flex;
   position: relative;
+}
+
+.ftux-slide-overlap:before {
+  content: "";
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(2px);
+  background: radial-gradient(circle at 50% 10%, #fff4d68c, #0000 60%), linear-gradient(#ffd28659, #ffffff0d);
+  border-radius: 0 0 60% 60% / 0 0 30% 30%;
+  width: 150%;
+  height: 60%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -48%);
 }
 
 .ftux-slide-step2 {
-  background-color: #f2f1ef;
-  padding-top: 8vh;
+  background-color: inherit;
+  background-image: inherit;
+  background-size: inherit;
 }
 
-.ftux-slide-step2 .ftux-mascot-area {
-  flex: none;
-  margin-top: 20px;
-  margin-bottom: 24px;
-}
-
-.ftux-slide-step2 .ftux-text-area {
-  margin-top: 28px;
-  padding: 0 40px 110px;
+.ftux-slide-step2 .ftux-fox-media {
+  transform: scale(.8);
 }
 
 .ftux-voice-bubble {
-  border: 2px solid var(--ftux-brand-blue);
   opacity: 0;
-  background: #fff;
-  border-radius: 20px 20px 20px 0;
+  z-index: 2;
+  background: #ffffffeb;
+  border: 2px solid #00acc166;
+  border-radius: 999px;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  padding: 12px 20px;
-  transition: all .5s cubic-bezier(.34, 1.56, .64, 1);
-  display: flex;
+  gap: 12px;
+  min-height: 44px;
+  margin: 0;
+  padding: 12px 26px;
+  transition: all .6s cubic-bezier(.34, 1.56, .64, 1);
+  display: inline-flex;
   position: relative;
-  transform: scale(.8);
-  box-shadow: 0 8px 20px #00acc126;
+  transform: translateY(8px)scale(.92);
+  box-shadow: 0 12px 30px #00acc12e, inset 0 0 0 1px #fff9;
 }
 
 .ftux-slide.active .ftux-voice-bubble {
   opacity: 1;
-  margin-bottom: 10px;
-  transform: scale(1);
+  transform: translateY(0)scale(1);
 }
 
 .ftux-voice-bubble:after {
   content: "";
-  border-left: 2px solid var(--ftux-brand-blue);
-  border-bottom: 2px solid var(--ftux-brand-blue);
-  clip-path: polygon(0 0, 100% 0, 100% 100%);
-  background: #fff;
-  border-bottom-left-radius: 50%;
-  width: 20px;
-  height: 20px;
+  background: inherit;
+  z-index: -1;
+  border: 2px solid #0000;
+  border-color: #0000 #0000 #00acc159 #00acc159;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
   position: absolute;
-  bottom: -10px;
-  left: 0;
+  bottom: -16px;
+  left: 26px;
+  transform: rotate(-35deg);
+  box-shadow: 0 10px 20px #00acc126;
 }
 
 .ftux-speaker-icon {
-  font-size: 1.2rem;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  display: flex;
 }
 
 .ftux-bubble-text {
@@ -5261,15 +5327,15 @@
 
 .ftux-wave-box {
   align-items: center;
-  gap: 4px;
-  height: 16px;
+  gap: 2px;
+  height: 12px;
   display: flex;
 }
 
 .ftux-bar {
-  background: var(--ftux-brand-blue);
+  background: currentColor;
   border-radius: 2px;
-  width: 4px;
+  width: 3px;
   height: 100%;
   animation: none;
   transform: scaleY(.4);
@@ -5312,57 +5378,153 @@
 }
 
 .ftux-mascot-area {
-  flex: 1;
+  z-index: 2;
+  flex: none;
   justify-content: center;
   align-items: center;
   width: 100%;
+  padding: 0;
   display: flex;
   position: relative;
 }
 
-.ftux-fox-pose {
-  filter: drop-shadow(0 20px 30px #5d403726);
-  transform-origin: bottom;
-  justify-content: center;
-  align-items: center;
-  font-size: 6rem;
-  animation: 4s ease-in-out infinite ftux-float;
-  display: flex;
+.ftux-mascot-area:before {
+  content: "";
+  filter: blur(30px);
+  opacity: .8;
+  z-index: 0;
+  background: radial-gradient(circle, #ffd8a473, #0000 65%);
+  width: clamp(220px, 60vw, 320px);
+  height: clamp(220px, 60vw, 320px);
+  animation: 8s ease-in-out infinite alternate ftux-blob-glow;
+  position: absolute;
 }
 
-.ftux-fox-img {
-  object-fit: contain;
-  width: min(260px, 70vw);
-  height: auto;
-}
-
-.ftux-fox-video {
-  object-fit: contain;
+.ftux-fox-media {
+  object-fit: cover;
+  border-radius: inherit;
+  z-index: 1;
   background: none;
-  width: min(390px, 90vw);
-  height: auto;
-}
-
-.ftux-fox-video-step2 {
-  transform-origin: center;
   width: 100%;
-  transform: scale(1.2);
-}
-
-.ftux-slide-step2 .ftux-fox-pose {
-  filter: none;
-  animation: none;
+  height: 100%;
+  display: block;
+  position: relative;
   transform: none;
 }
 
-.ftux-slide-step2 .ftux-voice-bubble {
-  z-index: 5;
-  background-color: #fffffff5;
-  margin-bottom: 0;
+.ftux-media-shell {
+  aspect-ratio: 1 / 1.02;
+  background: linear-gradient(155deg, #fff6e3, #ffe0c3 55%, #ffc8a0);
+  border-radius: 58% 42% 38% 62% / 52% 62% 38% 48%;
+  width: min(300px, 80vw);
+  padding: clamp(12px, 2.5vw, 16px);
+  animation: 11s ease-in-out infinite alternate ftux-blob-morph;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 28px 60px #f3a16059, inset 0 0 0 6px #ffffff73;
+}
+
+.ftux-media-shell-zoom {
+  aspect-ratio: 1 / 1.02;
+  will-change: width, height, padding, border-radius, transform;
+  animation: 11s ease-in-out infinite alternate ftux-blob-morph;
+}
+
+.ftux-media-shell-zoom video.ftux-fox-media {
+  transform-origin: center;
+  width: 100%;
+  height: 100%;
   position: absolute;
-  top: 18%;
-  left: 50%;
-  transform: translateX(-50%);
+  inset: 0;
+}
+
+.ftux-media-shell:before {
+  content: "";
+  border-radius: inherit;
+  opacity: .7;
+  filter: blur(12px);
+  z-index: 0;
+  background: radial-gradient(circle at 70% 20%, #fffc, #0000 60%);
+  position: absolute;
+  inset: 12px;
+}
+
+.ftux-media-shell:after {
+  content: "";
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+  border: 1px solid #fff9;
+  position: absolute;
+  inset: clamp(6px, 1.5vw, 10px);
+  box-shadow: inset 0 0 40px #fff3;
+}
+
+.ftux-media-shell img {
+  z-index: 1;
+  background: none;
+  position: relative;
+}
+
+.ftux-media-shell.ftux-media-shell-glyph {
+  background: linear-gradient(150deg, #fff4fb, #f1ddff 55%, #d9c2ff);
+  box-shadow: 0 28px 60px #a281ff4d, inset 0 0 0 6px #fff6;
+}
+
+.ftux-media-shell-glyph:before {
+  content: "";
+  border-radius: inherit;
+  filter: blur(10px);
+  z-index: 0;
+  background: radial-gradient(circle, #ffffff80, #0000 65%);
+  position: absolute;
+  inset: 12px;
+}
+
+.ftux-media-shell-glyph:after {
+  border-color: #fff6;
+}
+
+.ftux-media-glyph {
+  z-index: 1;
+  border-radius: inherit;
+  background: #ffffff1a;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: clamp(3rem, 8vw, 4.4rem);
+  display: flex;
+  position: relative;
+}
+
+@keyframes ftux-blob-morph {
+  0% {
+    border-radius: 58% 42% 38% 62% / 52% 62% 38% 48%;
+    transform: translateY(0)rotate(-1deg);
+  }
+
+  50% {
+    border-radius: 40% 60% 55% 45% / 40% 55% 45% 60%;
+    transform: translateY(-10px)rotate(1deg)scale(1.02);
+  }
+
+  100% {
+    border-radius: 64% 36% 44% 56% / 58% 44% 56% 42%;
+    transform: translateY(5px)rotate(-.5deg);
+  }
+}
+
+@keyframes ftux-blob-glow {
+  0% {
+    opacity: .5;
+    transform: scale(.95);
+  }
+
+  100% {
+    opacity: .9;
+    transform: scale(1.1);
+  }
 }
 
 @keyframes ftux-float {
@@ -5377,60 +5539,56 @@
 
 .ftux-text-area {
   text-align: center;
-  opacity: 0;
-  width: 100%;
-  padding: 0 40px 140px;
-  transition: all .5s .2s;
-  transform: translateY(20px);
-}
-
-.ftux-slide.active .ftux-text-area {
   opacity: 1;
+  width: min(340px, 86vw);
+  margin-top: clamp(6px, 1vh, 10px);
+  padding: 0;
   transform: translateY(0);
 }
 
 .ftux-title {
   font-family: var(--font-fredoka);
   color: var(--ftux-text-dark);
-  margin-bottom: 12px;
-  font-size: 1.8rem;
+  letter-spacing: .5px;
+  margin-bottom: 14px;
+  font-size: clamp(1.6rem, 5vw, 1.9rem);
 }
 
 .ftux-desc {
   color: var(--ftux-text-sub);
-  font-size: 1rem;
-  line-height: 1.6;
+  margin: 0;
+  font-size: clamp(1rem, 3.7vw, 1.1rem);
+  line-height: 1.65;
 }
 
-.ftux-bottom {
-  z-index: 260;
+.ftux-bottom-area {
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: clamp(20px, 3.5vh, 28px);
   width: 100%;
+  margin-top: auto;
+  padding-top: clamp(16px, 2.5vh, 24px);
   display: flex;
-  position: fixed;
-  bottom: 40px;
-  left: 0;
 }
 
 .ftux-dots {
-  gap: 8px;
+  gap: 12px;
   display: flex;
 }
 
 .ftux-dot {
-  background: #e0e0e0;
+  background: #00000014;
   border-radius: 50%;
-  width: 8px;
-  height: 8px;
-  transition: all .3s;
+  width: 10px;
+  height: 10px;
+  transition: width .3s, background .3s, border-radius .3s;
 }
 
 .ftux-dot.active {
-  background: var(--ftux-brand-gold);
-  border-radius: 4px;
-  width: 24px;
+  background: linear-gradient(90deg, gold, #ffb300);
+  border-radius: 999px;
+  width: 32px;
+  box-shadow: 0 6px 15px #ffb30059;
 }
 
 .ftux-btn {
@@ -6919,6 +7077,11 @@
 }
 
 @property --tw-duration {
+  syntax: "*";
+  inherits: false
+}
+
+@property --tw-ease {
   syntax: "*";
   inherits: false
 }

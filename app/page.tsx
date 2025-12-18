@@ -8,6 +8,9 @@ import { OnboardingGuide } from "@/components/onboarding-guide"
 import { FtuxIntro } from "@/components/ftux-intro"
 import { BookDetailModal, type CardRect } from "@/components/book-detail-modal"
 
+const FTUX_DEBUG_ENABLED =
+  process.env.NEXT_PUBLIC_FTUX_DEBUG === "true" || process.env.NEXT_PUBLIC_FTUX_DEBUG === "1"
+
 export default function Page() {
   const router = useRouter()
   const [activeScreen, setActiveScreen] = useState<"home" | "camera">("home")
@@ -24,6 +27,17 @@ export default function Page() {
   useEffect(() => {
     try {
       if (typeof window === "undefined") return
+
+      const params = new URLSearchParams(window.location.search || "")
+      const debugByQuery = params.get("ftuxDebug") === "1"
+      const debugMode = FTUX_DEBUG_ENABLED || debugByQuery
+
+      if (debugMode) {
+        localStorage.removeItem("hasSeenFtux")
+        setShowFtux(true)
+        return
+      }
+
       const hasSeenFtux = localStorage.getItem("hasSeenFtux")
       if (!hasSeenFtux) {
         setShowFtux(true)

@@ -554,23 +554,56 @@
   position: absolute;
   top: 50px;
   left: 24px;
-  /* 方案 2: 白瓷质感 - 纯白不透明背景 */
-  background: #FFFFFF;
-  /* 深褐色文字，对比度好，像书上的墨迹 */
-  color: #4A3222;
-  border-radius: 30px;
-  padding: 8px 14px;
-  /* 柔和的暖色阴影，让它浮起来但很温润 */
-  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.08);
+  /* 移除容器样式，仅保留基础定位 */
+  background: transparent;
+  backdrop-filter: none;
+  color: #bcaaa4;
+  border-radius: 0;
+  width: auto;
+  height: auto;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
   z-index: 100;
+  box-shadow: none;
+  border: none;
+  transition: all 0.2s ease;
   animation: ftux-speaker-fade-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  padding: 10px; /* 增加点击区域 */
 }
 
-.ftux-speaker-widget .ftux-bar {
-  animation: ftux-wave 1s infinite ease-in-out;
+.ftux-speaker-widget:hover {
+  transform: scale(1.1);
+  color: #8d6e63;
+}
+
+.ftux-speaker-widget:active {
+  transform: scale(0.9);
+}
+
+/* 播放中状态：通过颜色和简单的呼吸动画区分 */
+.ftux-speaker-widget.is-playing {
+  color: #8d6e63; /* 激活态颜色加深 */
+}
+
+/* 简单的图标呼吸动效 */
+.ftux-speaker-widget.is-playing .ftux-speaker-icon {
+  animation: ftux-icon-bounce 1.5s infinite ease-in-out;
+}
+
+@keyframes ftux-icon-bounce {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.18); /* 播放时轻微放大并跳动 */
+  }
+}
+
+.ftux-speaker-widget .ftux-wave-box {
+  display: none;
 }
 
 @keyframes ftux-speaker-fade-in {
@@ -584,12 +617,11 @@
   }
 }
 
-.ftux-root[data-ftux-step="2"] .ftux-skip-btn,
+/* .ftux-root[data-ftux-step="2"] .ftux-skip-btn,
 .ftux-root[data-ftux-step="2"] .ftux-speaker-widget {
-  /* 第三页沉浸：顶部不允许任何覆盖物 */
   opacity: 0;
   pointer-events: none;
-}
+} */
 
 .ftux-carousel {
   flex: 1;
@@ -615,8 +647,8 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-  /* 方案6：统一内容从顶部下移的节奏 */
-  padding: clamp(100px, 16vh, 140px) 20px clamp(40px, 6vh, 60px);
+  /* 整体内容向上移动 75px：通过调整 padding 实现 */
+  padding: clamp(25px, 16vh - 75px, 65px) 20px clamp(115px, 6vh + 75px, 135px);
   gap: clamp(24px, 4vh, 36px);
   /* 让每页使用与第一页一致的背景 */
   background-color: var(--ftux-bg-color);
@@ -640,19 +672,15 @@
   filter: blur(2px);
 }
 
-/* 第二步：保持与第一页一致的背景，避免视觉跳变 */
-.ftux-slide-step2 {
+/* 第二步、第三步：保持与第一页一致的背景，避免视觉跳变 */
+.ftux-slide-step2,
+.ftux-slide-page3 {
   background-color: inherit;
   background-image: inherit;
   background-size: inherit;
 }
 
-/* 第二步：缩小气泡内的图片，但保持气泡大小不变 */
-.ftux-slide-step2 .ftux-fox-media {
-  transform: scale(0.8);
-}
-
-/* 第二步的特殊调整已由统一的 flex 布局代替 */
+/* 第二步、第三步的特殊调整已由统一的 flex 布局代替 */
 
 .ftux-voice-bubble {
   background: rgba(255, 255, 255, 0.92);
@@ -719,50 +747,93 @@
   height: 12px;
 }
 
+.ftux-wave-box.is-paused .ftux-bar {
+  animation: none !important;
+}
+
 .ftux-bar {
   width: 3px;
-  height: 100%;
-  /* 使用当前颜色，跟随父元素的深褐色 */
+  /* 使用不同的初始高度，创造高低不平的效果 */
   background: currentColor;
   border-radius: 2px;
   animation: none;
-  transform: scaleY(0.4);
 }
 
-.ftux-slide.active .ftux-bar {
-  animation: ftux-wave 1s infinite ease-in-out;
+/* 每个 bar 有不同的初始高度，创造高低不平的波动效果 */
+.ftux-bar:nth-child(1) {
+  height: 6px;
 }
 
-.ftux-slide.active .ftux-bar:nth-child(1) {
+.ftux-bar:nth-child(2) {
+  height: 10px;
+}
+
+.ftux-bar:nth-child(3) {
+  height: 8px;
+}
+
+.ftux-bar:nth-child(4) {
+  height: 12px;
+}
+
+.ftux-bar:nth-child(5) {
+  height: 7px;
+}
+
+/* 为每个 bar 设置不同的峰值高度和延迟，创造更自然的波动效果 */
+.ftux-slide.active .ftux-bar:nth-child(1),
+.ftux-speaker-widget .ftux-bar:nth-child(1) {
+  animation: ftux-wave-1 1.5s infinite ease-in-out;
   animation-delay: 0s;
 }
 
-.ftux-slide.active .ftux-bar:nth-child(2) {
-  animation-delay: 0.1s;
+.ftux-slide.active .ftux-bar:nth-child(2),
+.ftux-speaker-widget .ftux-bar:nth-child(2) {
+  animation: ftux-wave-2 1.5s infinite ease-in-out;
+  animation-delay: 0.15s;
 }
 
-.ftux-slide.active .ftux-bar:nth-child(3) {
-  animation-delay: 0.2s;
-}
-
-.ftux-slide.active .ftux-bar:nth-child(4) {
+.ftux-slide.active .ftux-bar:nth-child(3),
+.ftux-speaker-widget .ftux-bar:nth-child(3) {
+  animation: ftux-wave-3 1.5s infinite ease-in-out;
   animation-delay: 0.3s;
 }
 
-.ftux-slide.active .ftux-bar:nth-child(5) {
-  animation-delay: 0.4s;
+.ftux-slide.active .ftux-bar:nth-child(4),
+.ftux-speaker-widget .ftux-bar:nth-child(4) {
+  animation: ftux-wave-4 1.5s infinite ease-in-out;
+  animation-delay: 0.45s;
 }
 
-@keyframes ftux-wave {
-  0%,
-  100% {
-    transform: scaleY(0.4);
-    opacity: 0.6;
-  }
-  50% {
-    transform: scaleY(1);
-    opacity: 1;
-  }
+.ftux-slide.active .ftux-bar:nth-child(5),
+.ftux-speaker-widget .ftux-bar:nth-child(5) {
+  animation: ftux-wave-5 1.5s infinite ease-in-out;
+  animation-delay: 0.6s;
+}
+
+@keyframes ftux-wave-1 {
+  0%, 100% { height: 6px; opacity: 0.6; }
+  50% { height: 14px; opacity: 1; }
+}
+
+@keyframes ftux-wave-2 {
+  0%, 100% { height: 10px; opacity: 0.7; }
+  50% { height: 12px; opacity: 1; }
+}
+
+@keyframes ftux-wave-3 {
+  0%, 100% { height: 8px; opacity: 0.6; }
+  50% { height: 16px; opacity: 1; }
+}
+
+@keyframes ftux-wave-4 {
+  0%, 100% { height: 12px; opacity: 0.7; }
+  50% { height: 10px; opacity: 1; }
+}
+
+@keyframes ftux-wave-5 {
+  0%, 100% { height: 7px; opacity: 0.6; }
+  50% { height: 15px; opacity: 1; }
 }
 
 .ftux-mascot-area {
@@ -814,32 +885,12 @@
   animation: ftux-blob-morph 11s ease-in-out infinite alternate;
 }
 
-.ftux-media-shell-zoom {
-  /* 第三页：JS 动态调节 width/height */
-  aspect-ratio: 1 / 1.02;
-  /* 大小/形状由 JS 在 3 秒内驱动，不依赖视频播放 */
-  will-change: width, height, padding, border-radius, transform;
-  /* 初始：保持气泡 UI */
-  animation: ftux-blob-morph 11s ease-in-out infinite alternate;
-}
-
-.ftux-media-shell-zoom video.ftux-fox-media {
-  /* 关键：固定定位，避免容器变化导致视频抖动 */
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  transform-origin: center center;
-}
-
-/* 注意：第三页“去气泡化”只做形状变化，颜色/边框/阴影保持原样 */
-
-.ftux-slide-page3 .ftux-mascot-area {
-  /* 第三页：不再立即全宽，由 JS 驱动 */
-}
-
-.ftux-slide-page3 {
-  /* 第三页：初始状态与前两页一致，由 JS 驱动沉浸式变换 */
+.ftux-media-shell video.ftux-fox-media {
+  /* 关键：覆盖 img 的默认 behavior，确保视频在气泡内显示正常 */
+  position: relative;
+  z-index: 1;
+  background: transparent;
+  object-fit: cover;
 }
 
 .ftux-media-shell::before {

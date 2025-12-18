@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState, UIEvent } from "react"
-import { Hand, Sparkles, Rocket } from "lucide-react"
+import { Hand, Sparkles, Rocket, Volume2, VolumeX } from "lucide-react"
 
 interface FtuxIntroProps {
   onFinish: () => void
@@ -12,11 +12,43 @@ const SLIDE_COUNT = 3
 export function FtuxIntro({ onFinish }: FtuxIntroProps) {
   const carouselRef = useRef<HTMLDivElement | null>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
-  const page3SlideRef = useRef<HTMLDivElement | null>(null)
-  const page3MascotRef = useRef<HTMLDivElement | null>(null)
-  const page3ShellRef = useRef<HTMLDivElement | null>(null)
   const page3VideoRef = useRef<HTMLVideoElement | null>(null)
-  const page3AnimRafRef = useRef<number | null>(null)
+  const [isPlaying, setIsPlaying] = useState(true)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  // 初始化音频
+  useEffect(() => {
+    const audio = new Audio("/demo.mp3")
+    audio.loop = true
+    audioRef.current = audio
+
+    if (isPlaying) {
+      audio.play().catch(() => {
+        // 自动播放可能被浏览器拦截，用户点击后会恢复
+        setIsPlaying(false)
+      })
+    }
+
+    return () => {
+      audio.pause()
+      audioRef.current = null
+    }
+  }, [])
+
+  // 响应播放状态变化
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.play().catch(() => setIsPlaying(false))
+      } else {
+        audioRef.current.pause()
+      }
+    }
+  }, [isPlaying])
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying)
+  }
 
   const handleScroll = (event: UIEvent<HTMLDivElement>) => {
     const container = event.currentTarget
@@ -51,23 +83,11 @@ export function FtuxIntro({ onFinish }: FtuxIntroProps) {
   }
 
   useEffect(() => {
-    // 只在第三页时驱动视频与容器缩放；离开第三页就复位
+    // 仅在第三页时确保视频播放，不再驱动任何缩放动画
     const video = page3VideoRef.current
-    const shell = page3ShellRef.current
     if (!video) return
 
     if (currentIndex !== 2) {
-      if (page3AnimRafRef.current) {
-        cancelAnimationFrame(page3AnimRafRef.current)
-        page3AnimRafRef.current = null
-      }
-      if (shell) {
-        shell.style.width = ""
-        shell.style.height = ""
-        shell.style.padding = ""
-        shell.style.borderRadius = ""
-        shell.style.transform = ""
-      }
       try {
         video.pause()
         video.currentTime = 0
@@ -81,89 +101,11 @@ export function FtuxIntro({ onFinish }: FtuxIntroProps) {
       try {
         await video.play()
       } catch {
-        // autoplay might be blocked; it is muted but still ignore safely
+        // autoplay might be blocked
       }
     }
 
     ensurePlay()
-
-    // 外层气泡：固定 3 秒内完成放大（与视频播放无关）
-    // 关键：不通过 React setState 每帧更新，避免引发重渲染导致视频抖动
-    const slide = page3SlideRef.current
-    const mascot = page3MascotRef.current
-    if (!slide || !shell || !mascot) return
-
-    // 先清空内联样式，确保初态完全沿用现有气泡 UI
-    shell.style.width = ""
-    shell.style.height = ""
-    shell.style.padding = ""
-    shell.style.borderRadius = ""
-    shell.style.transform = ""
-    shell.style.animation = "none" // 停止 CSS 里的 morph 动画，由 JS 接管
-
-    const durationMs = 3000
-    const start = performance.now()
-
-    const slideStyle = getComputedStyle(slide)
-    const slidePadTop = Number.parseFloat(slideStyle.paddingTop || "0") || 0
-
-    // base size from actual rendered bubble (保持原样)
-    const baseRect = shell.getBoundingClientRect()
-    const baseW = baseRect.width
-    const baseH = baseRect.height
-    const basePad = Number.parseFloat(getComputedStyle(shell).paddingTop || "0") || 0
-
-    // target size: full-bleed width (via mascot full-bleed) + half-screen height
-    const targetW = mascot.getBoundingClientRect().width
-    const slideH = slide.getBoundingClientRect().height
-    const targetH = Math.max(baseH, slideH * 0.5)
-    const targetPad = 0
-
-    // target translateY: remove slide paddingTop -> top flush (沉浸感)
-    const targetTy = -slidePadTop
-
-    const clamp01 = (v: number) => Math.max(0, Math.min(1, v))
-    const lerp = (a: number, b: number, k: number) => a + (b - a) * k
-    const easeOutCubic = (x: number) => 1 - Math.pow(1 - x, 3)
-
-    const step = (now: number) => {
-      const p = clamp01((now - start) / durationMs)
-      const t = easeOutCubic(p)
-
-      const w = lerp(baseW, targetW, t)
-      const h = lerp(baseH, targetH, t)
-      const pad = lerp(basePad, targetPad, t)
-
-      // 参考 demo：圆角从 50% -> 24px（只改变形状，颜色/边框/阴影等保持原样）
-      const rVal = 50 - 50 * t
-      const radius = rVal < 24 ? "24px" : `${50 - 40 * t}%`
-
-      const ty = lerp(0, targetTy, t)
-
-      // 关键：对 width/height 取整，并配合 translate3d，减少布局计算导致的抖动
-      // 视频画面抖动的根本原因通常是由于 container 尺寸是非整数导致的 object-fit 计算误差
-      shell.style.width = `${Math.round(w)}px`
-      shell.style.height = `${Math.round(h)}px`
-      shell.style.padding = `${Math.round(pad)}px`
-      shell.style.borderRadius = radius
-      shell.style.transform = `translate3d(0, ${ty}px, 0)`
-
-      // 素材本身略微放大（镜头更近），通过 translate3d(0,0,0) 开启硬件加速
-      const mediaScale = 1.1 + 0.1 * t
-      video.style.transform = `translate3d(0,0,0) scale(${mediaScale})`
-
-      if (p < 1) {
-        page3AnimRafRef.current = requestAnimationFrame(step)
-      } else {
-        page3AnimRafRef.current = null
-      }
-    }
-
-    page3AnimRafRef.current = requestAnimationFrame(step)
-    return () => {
-      if (page3AnimRafRef.current) cancelAnimationFrame(page3AnimRafRef.current)
-      page3AnimRafRef.current = null
-    }
   }, [currentIndex])
 
   return (
@@ -174,16 +116,20 @@ export function FtuxIntro({ onFinish }: FtuxIntroProps) {
       </button>
 
       {/* 扬声器播放组件 */}
-      <div className="ftux-speaker-widget">
-        <div className="ftux-speaker-icon">🔊</div>
-        <div className="ftux-wave-box">
-          <div className="ftux-bar" />
-          <div className="ftux-bar" />
-          <div className="ftux-bar" />
-          <div className="ftux-bar" />
-          <div className="ftux-bar" />
+      <button 
+        type="button"
+        className={`ftux-speaker-widget ${isPlaying ? 'is-playing' : ''}`}
+        onClick={togglePlay}
+        aria-label={isPlaying ? "暂停播放" : "开启播放"}
+      >
+        <div className="ftux-speaker-icon">
+          {isPlaying ? (
+            <Volume2 className="w-12 h-12" />
+          ) : (
+            <VolumeX className="w-12 h-12" />
+          )}
         </div>
-      </div>
+      </button>
 
       {/* 轮播主区域 */}
       <div
@@ -283,13 +229,9 @@ export function FtuxIntro({ onFinish }: FtuxIntroProps) {
         <div
           className={`ftux-slide ftux-slide-overlap ftux-slide-page3 ${currentIndex === 2 ? "active" : ""}`}
           id="ftux-slide-2"
-          ref={page3SlideRef}
         >
-          <div className="ftux-mascot-area" ref={page3MascotRef}>
-            <div
-              className="ftux-media-shell ftux-media-shell-zoom"
-              ref={page3ShellRef}
-            >
+          <div className="ftux-mascot-area">
+            <div className="ftux-media-shell">
               <video
                 className="ftux-fox-media"
                 src="/videos/ftux-reading.mp4"
